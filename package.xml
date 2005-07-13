@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0">
+  <name>Net_Wifi</name>
+  <summary>Scans for wireless networks</summary>
+  <description>Net_Wifi utilizes the command line tools "iwconfig" and "iwlist" to get information 
+    about wireless lan interfaces on the system and the current configuration. 
+    The class enables you to scan for wireless networks 
+    and get a bunch of information about them.</description>
+  <license>PHP License</license>
+
+  <maintainers>
+    <maintainer>
+      <user>cweiske</user>
+      <role>lead</role>
+      <name>Christian Weiske</name>
+      <email>cweiske@cweiske.de</email>
+    </maintainer>
+  </maintainers>
+
+  <release>
+    <version>0.1.0</version>
+    <date>2005-07-13</date>
+    <notes>
+     Initial release
+    </notes>
+    <state>beta</state>
+    <filelist>
+      <dir name="/" baseinstalldir="Net" role="php">
+        <file md5sum="893c8d21e3615bb0107460f7a4ddd66d">Wifi.php</file>
+        <dir name="examples" role="doc">
+            <file md5sum="e88e4ada9718d447c66d3bbb3ecb1407">Wifi_usage.php</file>
+        </dir>
+        <dir name="tests" role="test">
+          <file name="runtest.php" md5sum="d341daa6754370b1eb7e76f85cf7a3ae"/>
+          <file name="Wifi_testcase.php" md5sum="8783567ef03ee283ab5e4f4ffb9cdff8"/>
+        </dir>
+      </dir>
+    </filelist>
+  </release>
+
+  <changelog>
+    <release>
+      <version>0.1.0</version>
+      <date>2005-07-13</date>
+      <notes>
+        Initial release
+      </notes>
+      <state>beta</state>
+    </release>
+  </changelog>
+
+</package>
