@@ -14,16 +14,16 @@ class Net_Wifi_Test extends PHPUnit_TestCase
     *   the Net_Wifi instance
     */
     var $wls = null;
-    
-    
-    
+
+
+
     // constructor of the test suite
     function Net_Wifi_Test($name) {
        $this->PHPUnit_TestCase($name);
     }
 
-    
-    
+
+
     // called before the test functions will be executed
     // this function is defined in PHPUnit_TestCase and overwritten
     // here
@@ -31,8 +31,8 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->wls = new Net_Wifi();
     }
 
-    
-    
+
+
     /**
     *   tests the "current config" parser
     */
@@ -51,13 +51,13 @@ class Net_Wifi_Test extends PHPUnit_TestCase
             "          Tx excessive retries:0  Invalid misc:0   Missed beacon:0\r\n";
 
         $objConfig = $this->wls->parseCurrentConfig($strConfig);
-        
+
         $this->assertEquals( 'net_wifi_config', strtolower(get_class($objConfig)));
         $this->assertFalse ( $objConfig->associated);
         $this->assertTrue  ( $objConfig->activated);
         $this->assertEquals( '00:00:00:00:00:00',   $objConfig->ap);
 
-        
+
         //associated
         $strConfig = 
             "eth1      IEEE 802.11g  ESSID:\"wlan.informatik.uni-leipzig.de\"  Nickname:\"bogo\"\r\n" .
@@ -68,9 +68,9 @@ class Net_Wifi_Test extends PHPUnit_TestCase
             "          Link Quality=100/100  Signal level=-28 dBm  \r\n" .
             "          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0\r\n" .
             "          Tx excessive retries:0  Invalid misc:0   Missed beacon:102\r\n";
-        
+
         $objConfig = $this->wls->parseCurrentConfig($strConfig);
-        
+
         $this->assertTrue  ( $objConfig->associated);
         $this->assertTrue  ( $objConfig->activated);
         $this->assertEquals( '00:07:40:A0:75:E2'                , $objConfig->ap);
@@ -82,7 +82,7 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( 'IEEE 802.11g'                     , $objConfig->protocol);
         $this->assertEquals( -28                                , $objConfig->rssi);
 
-        
+
         //radio off = deactivated interface
         $strConfig =
             "eth1      radio off  ESSID:\"phpconf\"\r\n" .
@@ -93,15 +93,15 @@ class Net_Wifi_Test extends PHPUnit_TestCase
             "          Link Quality:0  Signal level:0  Noise level:0\r\n" .
             "          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0\r\n" .
             "          Tx excessive retries:0  Invalid misc:6   Missed beacon:0\r\n";
-        
+
         $objConfig = $this->wls->parseCurrentConfig($strConfig);
         $this->assertFalse( $objConfig->associated);
         $this->assertFalse( $objConfig->activated);
 
     }//function testParseCurrentConfig()
-    
-    
-    
+
+
+
     /**
     *   tests the "parseScan" function which
     *   scans the iwlist output
@@ -148,13 +148,13 @@ class Net_Wifi_Test extends PHPUnit_TestCase
             "                    Extra: RSSI: -59  dBm ",
             "                    Extra: Last beacon: 544ms ago",
             );
-        
+
         $arCells = $this->wls->parseScan($arLines);
-        
+
         $this->assertEquals( 3                           , count($arCells));
-        
+
         $this->assertEquals( 'net_wifi_cell'             , strtolower(get_class($arCells[0])));
-        
+
         $this->assertEquals( 'string'                    , gettype($arCells[0]->mac));
         $this->assertEquals( 'string'                    , gettype($arCells[0]->ssid));
         $this->assertEquals( 'string'                    , gettype($arCells[0]->mode));
@@ -166,8 +166,8 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( 'array'                     , gettype($arCells[0]->rates));
         $this->assertEquals( 'integer'                   , gettype($arCells[0]->rssi));
         $this->assertEquals( 'integer'                   , gettype($arCells[0]->beacon));
-        
-        
+
+
         $this->assertEquals( '00:02:6F:08:4E:8A'         , $arCells[0]->mac);
         $this->assertEquals( 'eurospot'                  , $arCells[0]->ssid);
         $this->assertEquals( 'master'                    , $arCells[0]->mode);
@@ -201,7 +201,7 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( -59                         , $arCells[2]->rssi);
         $this->assertEquals( 544                         , $arCells[2]->beacon);
 
-        
+
         //some other peers
         //driver: ipw2100 ???, samsung x10
         $arLines = array(
@@ -237,18 +237,18 @@ class Net_Wifi_Test extends PHPUnit_TestCase
             "                    Extra: Signal: -48  dBm",
             "                    Extra: Last beacon: 27631ms ago"
         );
-        
+
         $arCells = $this->wls->parseScan($arLines);
-        
+
         $this->assertEquals( 3                           , count($arCells));
-        
+
         $this->assertEquals( '00:40:05:28:EB:45'         , $arCells[0]->mac);
         $this->assertEquals( 'default'                   , $arCells[0]->ssid);
         //different signal name
         $this->assertEquals( -88                         , $arCells[0]->rssi);
         $this->assertEquals( 747642                      , $arCells[0]->beacon);
-        
-        
+
+
         //with ipw2200 1.0 we've got "Signal level=..." instead of "Extra: Signal"
         $arLines = array(
             "eth1      Scan completed :",
@@ -265,16 +265,16 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         );
 
         $arCells = $this->wls->parseScan($arLines);
-        
+
         $this->assertEquals( 1                           , count($arCells));
-        
+
         $this->assertEquals( '00:03:C9:44:34:2C'         , $arCells[0]->mac);
         $this->assertEquals( '<hidden>'                  , $arCells[0]->ssid);
         //different signal name
         $this->assertEquals( -51                         , $arCells[0]->rssi);
         $this->assertEquals( 9                           , $arCells[0]->beacon);
-        
-        
+
+
         //ipw2200 1.0.1
         $arLines = array(
             "eth1      Scan completed :",
@@ -301,16 +301,16 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         );
 
         $arCells = $this->wls->parseScan($arLines);
-        
+
         $this->assertEquals( 2                          , count($arCells));
-        
+
         $this->assertEquals( '00:0D:BC:68:28:1A'        , $arCells[0]->mac);
         $this->assertEquals( 'Rai Private'              , $arCells[0]->ssid);
         $this->assertEquals( -60                        , $arCells[0]->rssi);
         $this->assertEquals( 59                         , $arCells[0]->beacon);
-        
-        
-        
+
+
+
         //ipw2100 carsten (unknown version)
         $arLines = array(
             'eth1      Scan completed :',
@@ -329,9 +329,9 @@ class Net_Wifi_Test extends PHPUnit_TestCase
             '                    Quality:12/100  Signal level:-86 dBm  Noise level:-98 dBm',
             '                    Encryption key:off'
         );
-        
+
         $arCells = $this->wls->parseScan($arLines);
-        
+
         $this->assertEquals( 1                          , count($arCells));
         $this->assertEquals( '00:12:D9:AC:BD:00'        , $arCells[0]->mac);
         $this->assertEquals( 'Rai Wireless'             , $arCells[0]->ssid);
@@ -341,9 +341,9 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( 18                         , $arCells[0]->rate);
         $this->assertEquals( array(1.,2.,5.5,6.,9.,11.,12.,18.), $arCells[0]->rates);
         $this->assertEquals( false                      , $arCells[0]->encryption);
-        
+
 
     }//function testParseScan()
-    
+
 }//class Net_Wifi_Test extends PHPUnit_TestCase
 ?>
