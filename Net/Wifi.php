@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 /**
 *   A class for scanning wireless networks and identifying
-*   local wireless network interfaces
+*   local wireless network interfaces.
 *
 *   PHP versions 4 and 5
 *
@@ -21,8 +21,10 @@
 *   @date 2005-07-10 08:23
 */
 
+require_once 'Net/Wifi/Cell.php';
+require_once 'Net/Wifi/Config.php';
 //required for System::which() functionality
-require_once('System.php');
+require_once 'System.php';
 
 /**
 *   This class uses tools like iwconfig and iwlist to scan
@@ -41,9 +43,9 @@ class Net_Wifi
         'iwlist'             => '/usr/sbin/iwlist',
         '/proc/net/wireless' => '/proc/net/wireless'
     );
-    
-    
-    
+
+
+
     /**
     *   Constructor which tries to guess the paths of the tools
     */
@@ -59,9 +61,9 @@ class Net_Wifi
             $this->setPathIwconfig($iwlist);
         }
     }//function Net_Wifi()
-    
-    
-    
+
+
+
     /**
     *   Returns an object with the current state of the interface (connected/not connected, AP,...).
     *
@@ -78,9 +80,9 @@ class Net_Wifi
 
         return $this->parseCurrentConfig($strAll);
     }//function getCurrentConfig($strInterface)
-    
-    
-    
+
+
+
     /**
     *   Parses the iwconfig output to collect the current config information.
     *
@@ -123,17 +125,17 @@ class Net_Wifi
         if (strpos($strAll, 'radio off')) {
             $objConfig->activated = false;
         }
-        
+
         if (strpos($strAll, 'unassociated') === false
             && $objConfig->ap != null && $objConfig->ap != '00:00:00:00:00:00') {
             $objConfig->associated = true;
         }
-        
+
         return $objConfig;
     }//function parseCurrentConfig($strAll)
-    
-    
-    
+
+
+
     /**
     *   Checks if a network interface is connected to an access point.
     *
@@ -144,12 +146,12 @@ class Net_Wifi
     function isConnected($strInterface)
     {
         $objConfig = $this->getCurrentConfig($strInterface);
-        
+
         return $objConfig->associated;
     }//function isConnected($strInterface)
-    
-    
-    
+
+
+
     /**
     *   Returns an array with the names/device files of all supported wireless lan devices.
     *
@@ -185,12 +187,12 @@ class Net_Wifi
                 }
             }//foreach line
         }//use iwconfig
-        
+
         return $arWirelessInterfaces;
     }//function getSupportedInterfaces()
-    
-    
-    
+
+
+
     /**
     *   Scans for access points / ad hoc cells and returns them.
     *
@@ -202,12 +204,12 @@ class Net_Wifi
     {
         $arLines = array();
         exec($this->arFileLocation['iwlist'] . ' ' . escapeshellarg($strInterface) . ' scanning', $arLines);
-        
+
         return $this->parseScan( $arLines);
     }//function scan($strInterface)
-    
-    
-    
+
+
+
     /**
     *   Parses the output of iwlist and returns the recognized cells.
     *
@@ -221,7 +223,7 @@ class Net_Wifi
             //one line only -> no cells there
             return array();
         }
-        
+
         //split into cells
         $arCells = array();
         $nCurrentCell = -1;
@@ -231,21 +233,21 @@ class Net_Wifi
             if ($strLine == '') {
                 continue;
             }
-            
+
             if (substr($strLine, 0, 4) == 'Cell') {
                 //we've got a new cell
                 $nCurrentCell++;
                 //get cell number
                 $nCell = substr($strLine, 5, strpos($strLine, ' ', 5) - 5);
                 $arCells[$nCurrentCell] = new Net_Wifi_Cell();
-                
-                
+
+
                 $arCells[$nCurrentCell]->cell = $nCell;
-                
+
                 //remove cell information from line for further interpreting
                 $strLine = substr($strLine, strpos($strLine, '- ') + 2);
             }
-            
+
             $nPos       = strpos($strLine, ':');
             $nPosEquals = strpos($strLine, '=');
             if ($nPosEquals !== false && ($nPos === false || $nPosEquals < $nPos)) {
@@ -253,14 +255,14 @@ class Net_Wifi
                 $nPos = $nPosEquals;
             }
             $nPos++;
-            
+
             $strId    = strtolower(substr($strLine, 0, $nPos - 1));
             $strValue = trim(substr($strLine, $nPos));
             switch ($strId) {
                 case 'address':
                     $arCells[$nCurrentCell]->mac = $strValue;
                     break;
-                    
+
                 case 'essid':
                     if ($strValue[0] == '"') {
                         //has quotes around
@@ -269,21 +271,21 @@ class Net_Wifi
                         $arCells[$nCurrentCell]->ssid = $strValue;
                     }
                     break;
-                    
+
                 case 'bit rate':
                     $nRate = floatval(substr($strValue, 0, strpos($strValue, 'Mb/s')));
                     $arCells[$nCurrentCell]->rate = $nRate;
                     $arCells[$nCurrentCell]->rates[] = $nRate;
                     break;
-                    
+
                 case 'protocol':
                     $arCells[$nCurrentCell]->protocol = $strValue;
                     break;
-                    
+
                 case 'channel':
                     $arCells[$nCurrentCell]->channel = intval($strValue);
                     break;
-                    
+
                 case 'encryption key':
                     if ($strValue == 'on') {
                         $arCells[$nCurrentCell]->encryption = true;
@@ -291,7 +293,7 @@ class Net_Wifi
                         $arCells[$nCurrentCell]->encryption = false;
                     }
                     break;
-                    
+
                 case 'mode':
                     if (strtolower($strValue) == 'master') {
                         $arCells[$nCurrentCell]->mode = 'master';
@@ -299,11 +301,11 @@ class Net_Wifi
                         $arCells[$nCurrentCell]->mode = 'ad-hoc';
                     }
                     break;
-                    
+
                 case 'signal level':
                     $arCells[$nCurrentCell]->rssi = substr($strValue, 0, strpos($strValue, ' '));
                     break;
-                    
+
                 case 'quality':
                     $arData = explode('  ', $strValue);
                     $arCells[$nCurrentCell]->quality = $arData[0];
@@ -317,11 +319,11 @@ class Net_Wifi
                         }
                     }
                     break;
-                    
+
                 case 'frequency':
                     $arCells[$nCurrentCell]->frequency = $strValue;
                     break;
-                    
+
                 case 'extra':
                     $nPos     = strpos($strValue, ':');
                     $strSubId = strtolower(trim(substr($strValue, 0, $nPos)));
@@ -335,31 +337,31 @@ class Net_Wifi
                                 $arCells[$nCurrentCell]->rates[$nB] = floatval($strRate);
                             }
                             break;
-                        
+
                         case 'signal':
                         case 'rssi':
                             //-53 dBm
                             $arCells[$nCurrentCell]->rssi = intval(substr($strValue, 0, strpos($strValue, ' ')));
                             break;
-                        
+
                         case 'last beacon':
                             //25ms ago
                             $arCells[$nCurrentCell]->beacon = intval(substr($strValue, 0, strpos($strValue, 'ms')));
                             break;
-                            
+
                         default:
                             echo 'unknown iwconfig extra information: ' . $strSubId . "\r\n";
                             break;
                     }
                     break;
-                    
+
                 default:
                     echo 'unknown iwconfig information: ' . $strId . "\r\n";
                     break;
             }
         }//foreach line
-        
-        
+
+
         //not all outputs are sorted (note the 6)
         //Extra: Rates (Mb/s): 1 2 5.5 9 11 6 12 18 24 36 48 54
         //additionally, some drivers have many single "Bit Rate:" fields instead of one big one
@@ -368,12 +370,12 @@ class Net_Wifi
             $arCells[$nCurrentCell]->rates = array_unique($arCells[$nCurrentCell]->rates);
         }
 
-        
+
         return $arCells;
     }//function parseScan($arLines)
-    
-    
-    
+
+
+
     /**
     *   Tells the driver to use the access point with the given MAC address only.
     *
@@ -392,18 +394,18 @@ class Net_Wifi
         $arLines = array();
         $nReturnVar = 0;
         exec($this->arFileLocation['iwconfig'] . ' ' . escapeshellarg($strInterface) . ' ap ' . escapeshellarg($strMac), $arLines, $nReturnVar);
-        
+
         return $nReturnVar == 0;
     }//function connectToAccessPoint($strInterface, $strMac)
-    
-    
-    
+
+
+
     /**
     *   and now some dumb getters and setters
     */
-    
-    
-    
+
+
+
     /**
     *   Returns the set path to /proc/wireless.
     *   @access public
@@ -413,9 +415,9 @@ class Net_Wifi
     {
         return $this->arFileLocation['/proc/net/wireless'];
     }//function getPathProcWireless()
-    
-    
-    
+
+
+
     /**
     *   Returns the set path to /proc/net/wireless.
     *   @access public
@@ -425,9 +427,9 @@ class Net_Wifi
     {
         $this->arFileLocation['/proc/net/wireless'] = $strProcWireless;
     }//function setPathProcWireless( $strProcWireless)
-    
-    
-    
+
+
+
     /**
     *   Returns the set path to iwconfig.
     *   @access public
@@ -437,9 +439,9 @@ class Net_Wifi
     {
         return $this->arFileLocation['iwconfig'];
     }//function getPathIwconfig()
-    
-    
-    
+
+
+
     /**
     *   Returns the set path to iwconfig.
     *   @access public
@@ -449,9 +451,9 @@ class Net_Wifi
     {
         $this->arFileLocation['iwconfig'] = $strPathIwconfig;
     }//function setPathIwconfig( $strPathIwconfig)
-    
-    
-    
+
+
+
     /**
     *   Returns the set path to iwlist.
     *   @access public
@@ -461,9 +463,9 @@ class Net_Wifi
     {
         return $this->arFileLocation['iwlist'];
     }//function getPathIwlist()
-    
-    
-    
+
+
+
     /**
     *   Returns the set path to iwlist.
     *   @access public
@@ -473,175 +475,8 @@ class Net_Wifi
     {
         $this->arFileLocation['iwlist'] = $strPathIwlist;
     }//function setPathIwlist( $strPathIwlist)
-    
-    
+
+
 }//class Net_Wifi
-
-
-
-/**
-*   Cell information from a wifi scan.
-*/
-class Net_Wifi_Cell
-{
-    /**
-    *   The current cell number.
-    *   Has nothing to say.
-    *   @var int
-    */
-    var $cell       = null;
-    
-    /**
-    *   MAC address of the cell (access point or ad-hoc station).
-    *   example: 00:40:05:28:EB:45
-    *   @var string
-    */
-    var $mac        = null;
-    
-    /**
-    *   "Service Set IDentifier" of the cell which identifies the network.
-    *   Max. 32 alphanumeric characters
-    *   example: "My Network" (without quotes)
-    *   @var string
-    */
-    var $ssid       = null;
-    
-    /**
-    *   Network type.
-    *   can be "master" or "ad-hoc" (without quotes)
-    *   @var string
-    */
-    var $mode       = null;
-    
-    /**
-    *   Channel number used for communication.
-    *   number from 1 to 12 or so
-    *   @var int
-    */
-    var $channel    = null;
-    
-    /**
-    *   If encryption is used.
-    *   @var boolean
-    */
-    var $encryption = null;
-    
-    /**
-    *   Channel frequency.
-    *   example: 2.412GHz
-    *   @var string
-    */
-    var $frequency  = null;
-    
-    /**
-    *   The protocol version used.
-    *   example: IEEE 802.11b
-    *   @var string
-    */
-    var $protocol   = null;
-    
-    /**
-    *   Bit rate which is used (when connected).
-    *   @var float
-    */
-    var $rate       = null;
-    
-    /**
-    *   Array of supported bit rates.
-    *   @var array(float)
-    */
-    var $rates      = array();
-    
-    /**
-    *   Signal strength.
-    *   example: -59
-    *   @var int
-    */
-    var $rssi       = null;
-    
-    /**
-    *   The time since the last beacon (time sync) frame has been sent, in ms.
-    *   @var int
-    */
-    var $beacon     = null;
-}//class Net_Wifi_Cell
-
-
-
-/**
-*   Configuration settings of a wifi network interface
-*/
-class Net_Wifi_Config
-{
-    /**
-    *   If the interface is activated.
-    *   Some notebooks have a button which deactivates wifi, this is recognized here.
-    *   Note that this setting can't be read by all drivers, and so
-    *    it's "true" if it can't be determined. You can be sure that it's deactivated
-    *    if this setting is false, but not that it's activated if it's true
-    *   @var boolean
-    */
-    var $activated  = true;
-    
-    /**
-    *   If the interface is connected to an access point or an ad-hoc network.
-    *   @var boolean
-    */
-    var $associated = false;
-    
-    /**
-    *   MAC address of the associated access point.
-    *   @var string
-    */
-    var $ap         = null;
-    
-    /**
-    *   "Service Set IDentifier" of the cell which identifies current network.
-    *   Max. 32 alphanumeric characters
-    *   example: "My Network" (without quotes)
-    *   @var string
-    */
-    var $ssid       = null;
-    
-    /**
-    *   Network type.
-    *   Can be "master" or "ad-hoc" (without quotes)
-    *   @var string
-    */
-    var $mode       = null;
-    
-    /**
-    *   The nickname which the interface (computer) uses.
-    *   Something like a computer name
-    *   @var string
-    */
-    var $nick       = null;
-    
-    /**
-    *   The bit rate of the connection.
-    *   @var float
-    */
-    var $rate       = null;
-    
-    /**
-    *   Power setting of the interface.
-    *   @var int
-    */
-    var $power      = null;
-    
-    /**
-    *   Protocol version which is used for connection.
-    *   example: "IEEE 802.11g" without quotes
-    *   @var string
-    */
-    var $protocol   = null;
-    
-    /**
-    *   Signal strength.
-    *   example: -59
-    *   @var int
-    */
-    var $rssi       = null;
-}//class Net_Wifi_Config
 
 ?>

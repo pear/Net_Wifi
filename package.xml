@@ -43,7 +43,11 @@
  <contents>
   <dir name="/">
    <dir name="Net">
-     <file name="Wifi.php" role="php" />
+    <file name="Wifi.php" role="php" />
+    <dir name="Wifi">
+     <file name="Cell.php" role="php" />
+     <file name="Config.php" role="php" />
+    </dir>
    </dir>
    <dir name="examples">
     <file baseinstalldir="Net" name="Wifi_usage.php" role="doc" />
