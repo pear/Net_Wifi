@@ -17,8 +17,6 @@
 *   @package Net
 *   @license    http://www.php.net/license/3_0.txt  PHP License 3.0
 *   @version    CVS: $Id$
-*
-*   @date 2005-07-10 08:23
 */
 
 require_once 'Net/Wifi/Cell.php';
@@ -55,10 +53,15 @@ class Net_Wifi
         $iwconfig = System::which('iwconfig');
         if ($iwconfig !== false) {
             $this->setPathIwconfig($iwconfig);
+        } else if (file_exists('/sbin/iwconfig')) {
+            $this->setPathIwconfig('/sbin/iwconfig');
         }
+
         $iwlist = System::which('iwlist');
         if ($iwlist !== false) {
-            $this->setPathIwconfig($iwlist);
+            $this->setPathIwlist($iwlist);
+        } else if (file_exists('/sbin/iwlist')) {
+            $this->setPathIwlist('/sbin/iwlist');
         }
     }//function Net_Wifi()
 
