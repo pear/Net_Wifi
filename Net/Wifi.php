@@ -112,7 +112,7 @@ class Net_Wifi
         } else if (strpos($strAll, 'Mode:Ad-Hoc')) {
             $objConfig->mode = 'ad-hoc';
         }
-        if (preg_match('/Bit Rate=([0-9.]+) [mk]b\\/s/i', $strAll, $arMatches)) {
+        if (preg_match('/Bit Rate[:=]([0-9.]+) [mk]b\\/s/i', $strAll, $arMatches)) {
             $objConfig->rate = $arMatches[1];
         }
         if (preg_match('/Power=([0-9]+) dBm/', $strAll, $arMatches)) {

@@ -82,6 +82,29 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( 'IEEE 802.11g'                     , $objConfig->protocol);
         $this->assertEquals( -28                                , $objConfig->rssi);
 
+        //format changed a bit
+        $strConfig = <<<EOD
+eth1      IEEE 802.11g  ESSID:"wlan.informatik.uni-leipzig.de"
+          Mode:Managed  Frequency:2.412 GHz  Access Point: 00:07:40:A0:75:E2
+          Bit Rate:54 Mb/s   Tx-Power=20 dBm   Sensitivity=8/0
+          Retry limit:7   RTS thr:off   Fragment thr:off
+          Power Management:off
+          Link Quality=93/100  Signal level=-35 dBm  Noise level=-89 dBm
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+EOD;
+        $objConfig = $this->wls->parseCurrentConfig($strConfig);
+
+        $this->assertTrue  ( $objConfig->associated);
+        $this->assertTrue  ( $objConfig->activated);
+        $this->assertEquals( '00:07:40:A0:75:E2'                , $objConfig->ap);
+        $this->assertEquals( 'wlan.informatik.uni-leipzig.de'   , $objConfig->ssid);
+        $this->assertEquals( 'managed'                          , $objConfig->mode);
+        $this->assertEquals( null                               , $objConfig->nick);
+        $this->assertEquals( 54                                 , $objConfig->rate);
+        $this->assertEquals( 20                                 , $objConfig->power);
+        $this->assertEquals( 'IEEE 802.11g'                     , $objConfig->protocol);
+        $this->assertEquals( -35                                , $objConfig->rssi);
 
         //radio off = deactivated interface
         $strConfig =
