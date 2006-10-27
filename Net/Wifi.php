@@ -227,6 +227,9 @@ class Net_Wifi
             return array();
         }
 
+        //if bit rates are alone on lines
+        $bStandaloneRates = false;
+
         //split into cells
         $arCells = array();
         $nCurrentCell = -1;
@@ -277,8 +280,14 @@ class Net_Wifi
 
                 case 'bit rate':
                     $nRate = floatval(substr($strValue, 0, strpos($strValue, 'Mb/s')));
-                    $arCells[$nCurrentCell]->rate = $nRate;
+                    $arCells[$nCurrentCell]->rate    = $nRate;
                     $arCells[$nCurrentCell]->rates[] = $nRate;
+                    break;
+
+                case 'bit rates':
+                    $bStandaloneRates = true;
+                    $arLines[$nA] = $strValue;
+                    $nA--;//go back one so that this line is re-parsed
                     break;
 
                 case 'protocol':
@@ -359,6 +368,16 @@ class Net_Wifi
                     break;
 
                 default:
+                    if ($bStandaloneRates) {
+                        if (preg_match_all('|([0-9.]+) Mb/s|', $strLine, $arMatches) > 0) {
+                            foreach ($arMatches[1] as $nRate) {
+                                $nRate = floatval($nRate);
+                                $arCells[$nCurrentCell]->rate    = $nRate;
+                                $arCells[$nCurrentCell]->rates[] = $nRate;
+                            }
+                            break;
+                        }
+                    }
                     echo 'unknown iwconfig information: ' . $strId . "\r\n";
                     break;
             }

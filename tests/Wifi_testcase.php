@@ -366,6 +366,36 @@ EOD;
         $this->assertEquals( false                      , $arCells[0]->encryption);
 
 
+        //ipw2200 kernel 2.18.1 (probably version 1.1.3)
+        $arLines = explode("\n", <<<EOD
+eth1      Scan completed :
+          Cell 01 - Address: 00:12:D9:AC:BD:00
+                    ESSID:"<hidden>"
+                    Protocol:IEEE 802.11bg
+                    Mode:Master
+                    Channel:1
+                    Encryption key:off
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 6 Mb/s; 9 Mb/s
+                              11 Mb/s; 12 Mb/s; 18 Mb/s; 24 Mb/s; 36 Mb/s
+                              48 Mb/s; 54 Mb/s
+                    Quality=89/100  Signal level=-40 dBm
+                    Extra: Last beacon: 1472ms ago
+EOD
+        );
+        $arCells = $this->wls->parseScan($arLines);
+
+        $this->assertEquals( 1                          , count($arCells));
+        $this->assertEquals( '00:12:D9:AC:BD:00'        , $arCells[0]->mac);
+        $this->assertEquals( '<hidden>'                 , $arCells[0]->ssid);
+        $this->assertEquals( 'master'                   , $arCells[0]->mode);
+        $this->assertEquals( -40                        , $arCells[0]->rssi);
+        $this->assertEquals( null                       , $arCells[0]->frequency);
+        $this->assertEquals( 54                         , $arCells[0]->rate);
+        $this->assertEquals( array(1.,2.,5.5,6.,9.,11.,
+                                12.,18.,24.,36.,48.,54.), $arCells[0]->rates);
+        $this->assertEquals( false                      , $arCells[0]->encryption);
+        $this->assertEquals( 1472                       , $arCells[0]->beacon);
+
     }//function testParseScan()
 
 }//class Net_Wifi_Test extends PHPUnit_TestCase
