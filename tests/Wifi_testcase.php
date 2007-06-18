@@ -79,7 +79,7 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( 'bogo'                             , $objConfig->nick);
         $this->assertEquals( 54                                 , $objConfig->rate);
         $this->assertEquals( 20                                 , $objConfig->power);
-        $this->assertEquals( 'IEEE 802.11g'                     , $objConfig->protocol);
+        $this->assertEquals( '802.11g'                          , $objConfig->protocol);
         $this->assertEquals( -28                                , $objConfig->rssi);
         $this->assertEquals( null                               , $objConfig->noise);
 
@@ -104,7 +104,7 @@ EOD;
         $this->assertEquals( null                               , $objConfig->nick);
         $this->assertEquals( 54                                 , $objConfig->rate);
         $this->assertEquals( 20                                 , $objConfig->power);
-        $this->assertEquals( 'IEEE 802.11g'                     , $objConfig->protocol);
+        $this->assertEquals( '802.11g'                          , $objConfig->protocol);
         $this->assertEquals( -35                                , $objConfig->rssi);
         $this->assertEquals( -89                                , $objConfig->noise);
 
@@ -138,6 +138,7 @@ EOT;
         $objConfig = $this->wls->parseCurrentConfig($strConfig);
         $this->assertEquals( -49                                , $objConfig->rssi);
         $this->assertEquals( -249                               , $objConfig->noise);
+        $this->assertEquals( '802.11b'                          , $objConfig->protocol);
     }//function testParseCurrentConfig()
 
 
@@ -213,7 +214,7 @@ EOT;
         $this->assertEquals( 'master'                    , $arCells[0]->mode);
         $this->assertEquals( 1                           , $arCells[0]->channel);
         $this->assertEquals( false                       , $arCells[0]->encryption);
-        $this->assertEquals( 'IEEE 802.11b'              , $arCells[0]->protocol);
+        $this->assertEquals( '802.11b'                   , $arCells[0]->protocol);
         $this->assertEquals( 11                          , $arCells[0]->rate);
         $this->assertEquals( array(1., 2., 5.5, 11.)     , $arCells[0]->rates);
         $this->assertEquals( -54                         , $arCells[0]->rssi);
@@ -224,7 +225,7 @@ EOT;
         $this->assertEquals( 'master'                    , $arCells[1]->mode);
         $this->assertEquals( 6                           , $arCells[1]->channel);
         $this->assertEquals( true                        , $arCells[1]->encryption);
-        $this->assertEquals( 'IEEE 802.11g'              , $arCells[1]->protocol);
+        $this->assertEquals( '802.11g'                  , $arCells[1]->protocol);
         $this->assertEquals( 54                          , $arCells[1]->rate);
         $this->assertEquals( array(1., 2., 5.5, 6., 9., 11., 12., 18., 24., 36., 48., 54.), $arCells[1]->rates);
         $this->assertEquals( -53                         , $arCells[1]->rssi);
@@ -235,7 +236,7 @@ EOT;
         $this->assertEquals( 'master'                    , $arCells[2]->mode);
         $this->assertEquals( 1                           , $arCells[2]->channel);
         $this->assertEquals( false                       , $arCells[2]->encryption);
-        $this->assertEquals( 'IEEE 802.11b'              , $arCells[2]->protocol);
+        $this->assertEquals( '802.11b'                   , $arCells[2]->protocol);
         $this->assertEquals( 11                          , $arCells[2]->rate);
         $this->assertEquals( array(1., 2., 5.5, 11.)     , $arCells[2]->rates);
         $this->assertEquals( -59                         , $arCells[2]->rssi);

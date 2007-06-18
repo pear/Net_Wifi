@@ -39,6 +39,8 @@
   - Mark stable
   - Add support for noise level
   - Fixing bug #11343: fix preg_match for rssi value/signal strength
+  - Fix protocol detection when no IEEE is given
+  - BC break: IEEE not shown anymore in protocol version
   - Switch to LGPL license
  </notes>
 
@@ -90,6 +92,8 @@
   - Mark stable
   - Add support for noise level
   - Fixing bug #11343: fix preg_match for rssi value/signal strength
+  - Fix protocol detection when no IEEE is given
+  - BC break: IEEE not shown anymore in protocol version
   - Switch to LGPL license
    </notes>
   </release>

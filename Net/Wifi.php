@@ -124,9 +124,12 @@ class Net_Wifi
         if (preg_match('/Noise level[:=](-?[0-9]+) dBm/', $strAll, $arMatches)) {
             $objConfig->noise = $arMatches[1];
         }
-        if (preg_match('/(IEEE [0-9.]+[a-z])/', $strAll, $arMatches)) {
+        if (preg_match('/IEEE ([0-9.]+[a-z])/', $strAll, $arMatches)) {
+            $objConfig->protocol = $arMatches[1];
+        } else if (preg_match('/([0-9.]+[a-z])\s+linked\s+ESSID/', $strAll, $arMatches)) {
             $objConfig->protocol = $arMatches[1];
         }
+
         //available in ipw2200 1.0.3 only
         if (strpos($strAll, 'radio off')) {
             $objConfig->activated = false;
@@ -294,6 +297,9 @@ class Net_Wifi
                     break;
 
                 case 'protocol':
+                    if (substr($strValue, 0, 5) == 'IEEE ') {
+                        $strValue = substr($strValue, 5);
+                    }
                     $arCells[$nCurrentCell]->protocol = $strValue;
                     break;
 
