@@ -20,26 +20,26 @@
  <lead>
   <name>Christian Weiske</name>
   <user>cweiske</user>
-  <email>cweiske@cweiske.de</email>
+  <email>cweiske@php.net</email>
   <active>yes</active>
  </lead>
- <date>2006-10-27</date>
- <time>22:53:00</time>
+ <date>2007-06-18</date>
 
  <version>
-  <release>0.2.0</release>
-  <api>0.2.0</api>
+  <release>1.0.0</release>
+  <api>1.0.0</api>
  </version>
  <stability>
-  <release>beta</release>
-  <api>beta</api>
+  <release>stable</release>
+  <api>stable</api>
  </stability>
- <license uri="http://www.php.net/license">PHP License</license>
+ <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL</license>
 
  <notes>
-  - Fix bug in setting iwlist path
-  - Check /sbin/, not only /usr/sbin/ for iwconfig and iwlist
-  - Add support for changed output in latest iwconfig/iwlist
+  - Mark stable
+  - Add support for noise level
+  - Fixing bug #11343: fix preg_match for rssi value/signal strength
+  - Switch to LGPL license
  </notes>
 
  <contents>
@@ -74,6 +74,25 @@
 
  <phprelease />
  <changelog>
+
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-06-18</date>
+   <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL</license>
+   <notes>
+  - Mark stable
+  - Add support for noise level
+  - Fixing bug #11343: fix preg_match for rssi value/signal strength
+  - Switch to LGPL license
+   </notes>
+  </release>
 
   <release>
    <version>

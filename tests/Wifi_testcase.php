@@ -81,6 +81,7 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( 20                                 , $objConfig->power);
         $this->assertEquals( 'IEEE 802.11g'                     , $objConfig->protocol);
         $this->assertEquals( -28                                , $objConfig->rssi);
+        $this->assertEquals( null                               , $objConfig->noise);
 
         //format changed a bit
         $strConfig = <<<EOD
@@ -105,6 +106,7 @@ EOD;
         $this->assertEquals( 20                                 , $objConfig->power);
         $this->assertEquals( 'IEEE 802.11g'                     , $objConfig->protocol);
         $this->assertEquals( -35                                , $objConfig->rssi);
+        $this->assertEquals( -89                                , $objConfig->noise);
 
         //radio off = deactivated interface
         $strConfig =
@@ -121,6 +123,21 @@ EOD;
         $this->assertFalse( $objConfig->associated);
         $this->assertFalse( $objConfig->activated);
 
+
+        //Bug #11343: fix preg_match for rssi value/signal strength
+        $strConfig = <<<EOT
+wlan0     802.11b linked  ESSID:"Project-Node-Zero"
+          Mode:Managed  Frequency:2.437 GHz  Access Point: 00:12:17:AD:2C:CE
+          Bit Rate=11 Mb/s   Sensitivity=80/85
+          Retry:on   Fragment thr:off
+          Power Management:off
+          Link Quality:93/100  Signal level:-49 dBm  Noise level:-249 dBm
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+EOT;
+        $objConfig = $this->wls->parseCurrentConfig($strConfig);
+        $this->assertEquals( -49                                , $objConfig->rssi);
+        $this->assertEquals( -249                               , $objConfig->noise);
     }//function testParseCurrentConfig()
 
 

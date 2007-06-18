@@ -115,11 +115,14 @@ class Net_Wifi
         if (preg_match('/Bit Rate[:=]([0-9.]+) [mk]b\\/s/i', $strAll, $arMatches)) {
             $objConfig->rate = $arMatches[1];
         }
-        if (preg_match('/Power=([0-9]+) dBm/', $strAll, $arMatches)) {
+        if (preg_match('/Power[:=]([0-9]+) dBm/', $strAll, $arMatches)) {
             $objConfig->power = $arMatches[1];
         }
-        if (preg_match('/Signal level=(-?[0-9]+) dBm/', $strAll, $arMatches)) {
+        if (preg_match('/Signal level[:=](-?[0-9]+) dBm/', $strAll, $arMatches)) {
             $objConfig->rssi = $arMatches[1];
+        }
+        if (preg_match('/Noise level[:=](-?[0-9]+) dBm/', $strAll, $arMatches)) {
+            $objConfig->noise = $arMatches[1];
         }
         if (preg_match('/(IEEE [0-9.]+[a-z])/', $strAll, $arMatches)) {
             $objConfig->protocol = $arMatches[1];

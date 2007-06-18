@@ -18,24 +18,16 @@ class Net_Wifi_Config
     var $activated  = true;
 
     /**
-    *   If the interface is connected to an access point or an ad-hoc network.
-    *   @var boolean
-    */
-    var $associated = false;
-
-    /**
     *   MAC address of the associated access point.
     *   @var string
     */
     var $ap         = null;
 
     /**
-    *   "Service Set IDentifier" of the cell which identifies current network.
-    *   Max. 32 alphanumeric characters
-    *   example: "My Network" (without quotes)
-    *   @var string
+    *   If the interface is connected to an access point or an ad-hoc network.
+    *   @var boolean
     */
-    var $ssid       = null;
+    var $associated = false;
 
     /**
     *   Network type.
@@ -52,10 +44,11 @@ class Net_Wifi_Config
     var $nick       = null;
 
     /**
-    *   The bit rate of the connection.
-    *   @var float
+    *   Noise level in dBm - how much the signal is disturbed
+    *   example: -249
+    *   @var int
     */
-    var $rate       = null;
+    var $noise      = null;
 
     /**
     *   Power setting of the interface.
@@ -71,10 +64,25 @@ class Net_Wifi_Config
     var $protocol   = null;
 
     /**
-    *   Signal strength.
+    *   The bit rate of the connection.
+    *   @var float
+    */
+    var $rate       = null;
+
+    /**
+    *   Signal strength in dBm.
     *   example: -59
     *   @var int
     */
     var $rssi       = null;
+
+    /**
+    *   "Service Set IDentifier" of the cell which identifies current network.
+    *   Max. 32 alphanumeric characters
+    *   example: "My Network" (without quotes)
+    *   @var string
+    */
+    var $ssid       = null;
+
 }//class Net_Wifi_Config
 ?>
