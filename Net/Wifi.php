@@ -130,6 +130,25 @@ class Net_Wifi
             $objConfig->protocol = $arMatches[1];
         }
 
+        if (preg_match('/Rx invalid nwid[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+            $objConfig->packages_rx_invalid_nwid = $arMatches[1];
+        }
+        if (preg_match('/Rx invalid crypt[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+            $objConfig->packages_rx_invalid_crypt = $arMatches[1];
+        }
+        if (preg_match('/Rx invalid frag[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+            $objConfig->packages_rx_invalid_frag = $arMatches[1];
+        }
+        if (preg_match('/Tx excessive retries[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+            $objConfig->packages_tx_excessive_retries = $arMatches[1];
+        }
+        if (preg_match('/Invalid misc[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+            $objConfig->packages_invalid_misc = $arMatches[1];
+        }
+        if (preg_match('/Missed beacon[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+            $objConfig->packages_missed_beacon = $arMatches[1];
+        }
+
         //available in ipw2200 1.0.3 only
         if (strpos($strAll, 'radio off')) {
             $objConfig->activated = false;

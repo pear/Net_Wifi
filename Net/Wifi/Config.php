@@ -51,6 +51,53 @@ class Net_Wifi_Config
     var $noise      = null;
 
     /**
+    *   Other packets lost in relation with specific wireless operations.
+    *   @var int
+    */
+    var $packages_invalid_misc = 0;
+
+    /**
+    *   Number of periodic beacons from the Cell or the Access Point we have
+    *   missed. Beacons are sent at regular intervals to maintain the cell
+    *   coordination, failure to receive them usually indicates that the card
+    *   is out of range.
+    *   @var int
+    */
+    var $packages_missed_beacon = 0;
+
+    /**
+    *   Number of packets that the hardware was unable to decrypt.
+    *   This can be used to detect invalid encryption
+    *   settings.
+    *   @var int
+    */
+    var $packages_rx_invalid_crypt = null;
+
+    /**
+    *   Number of packets for which the hardware was not able to properly
+    *   re-assemble the link layer fragments (most likely
+    *   one was missing).
+    *   @var int
+    */
+    var $packages_rx_invalid_frag = null;
+
+    /**
+    *   Number of packets received with a different NWID or ESSID.
+    *   Used to detect configuration problems or adjacent
+    *   network existence (on the same frequency).
+    *   @var int
+    */
+    var $packages_rx_invalid_nwid = null;
+
+    /**
+    *   Number of packages that needed to be re-submitted repeatedly again
+    *   and again, because no ACK was received for them.
+    *   You have a bad connection or are connecting long distance.
+    *   @var int
+    */
+    var $packages_tx_excessive_retries = null;
+
+    /**
     *   Power setting of the interface.
     *   @var int
     */

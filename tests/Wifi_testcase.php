@@ -82,6 +82,12 @@ class Net_Wifi_Test extends PHPUnit_TestCase
         $this->assertEquals( '802.11g'                          , $objConfig->protocol);
         $this->assertEquals( -28                                , $objConfig->rssi);
         $this->assertEquals( null                               , $objConfig->noise);
+        $this->assertEquals( 0                                  , $objConfig->packages_invalid_misc);
+        $this->assertEquals( 102                                , $objConfig->packages_missed_beacon);
+        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_crypt);
+        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_frag);
+        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_nwid);
+        $this->assertEquals( 0                                  , $objConfig->packages_tx_excessive_retries);
 
         //format changed a bit
         $strConfig = <<<EOD
@@ -122,6 +128,12 @@ EOD;
         $objConfig = $this->wls->parseCurrentConfig($strConfig);
         $this->assertFalse( $objConfig->associated);
         $this->assertFalse( $objConfig->activated);
+        $this->assertEquals( 6                                  , $objConfig->packages_invalid_misc);
+        $this->assertEquals( 0                                  , $objConfig->packages_missed_beacon);
+        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_crypt);
+        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_frag);
+        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_nwid);
+        $this->assertEquals( 0                                  , $objConfig->packages_tx_excessive_retries);
 
 
         //Bug #11343: fix preg_match for rssi value/signal strength
