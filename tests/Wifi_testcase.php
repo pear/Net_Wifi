@@ -122,18 +122,18 @@ EOD;
             "          RTS thr:off   Fragment thr:off\r\n" .
             "          Power Management:off\r\n" .
             "          Link Quality:0  Signal level:0  Noise level:0\r\n" .
-            "          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0\r\n" .
-            "          Tx excessive retries:0  Invalid misc:6   Missed beacon:0\r\n";
+            "          Rx invalid nwid:12  Rx invalid crypt:23  Rx invalid frag:42\r\n" .
+            "          Tx excessive retries:332  Invalid misc:6   Missed beacon:923\r\n";
 
         $objConfig = $this->wls->parseCurrentConfig($strConfig);
         $this->assertFalse( $objConfig->associated);
         $this->assertFalse( $objConfig->activated);
         $this->assertEquals( 6                                  , $objConfig->packages_invalid_misc);
-        $this->assertEquals( 0                                  , $objConfig->packages_missed_beacon);
-        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_crypt);
-        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_frag);
-        $this->assertEquals( 0                                  , $objConfig->packages_rx_invalid_nwid);
-        $this->assertEquals( 0                                  , $objConfig->packages_tx_excessive_retries);
+        $this->assertEquals( 923                                , $objConfig->packages_missed_beacon);
+        $this->assertEquals( 23                                 , $objConfig->packages_rx_invalid_crypt);
+        $this->assertEquals( 42                                 , $objConfig->packages_rx_invalid_frag);
+        $this->assertEquals( 12                                 , $objConfig->packages_rx_invalid_nwid);
+        $this->assertEquals( 332                                , $objConfig->packages_tx_excessive_retries);
 
 
         //Bug #11343: fix preg_match for rssi value/signal strength
