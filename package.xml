@@ -43,6 +43,7 @@
   - BC break: IEEE not shown anymore in protocol version
   - Implement Feature #11358: more info could be parsed from the iwconfig and made available to php code. [kguest]
   - Switch to LGPL license
+  - PHPUnit3 + AllTests.php for better automatic testing
  </notes>
 
  <contents>
@@ -55,11 +56,11 @@
     </dir>
    </dir>
    <dir name="examples">
-    <file baseinstalldir="Net" name="Wifi_usage.php" role="doc" />
+    <file name="Wifi_usage.php" role="doc" />
    </dir>
    <dir name="tests">
-    <file baseinstalldir="Net" name="runtest.php" role="test" />
-    <file baseinstalldir="Net" name="Wifi_testcase.php" role="test" />
+    <file name="AllTests.php" role="test" />
+    <file name="Net_WifiTest.php" role="test" />
    </dir>
   </dir>
  </contents>
@@ -97,6 +98,7 @@
   - BC break: IEEE not shown anymore in protocol version
   - Implement Feature #11358: more info could be parsed from the iwconfig and made available to php code. [kguest]
   - Switch to LGPL license
+  - PHPUnit3 + AllTests.php for better automatic testing
    </notes>
   </release>
 
