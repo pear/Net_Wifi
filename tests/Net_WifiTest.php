@@ -7,6 +7,8 @@ if (!defined("PHPUnit_MAIN_METHOD")) {
 require_once "PHPUnit/Framework/TestCase.php";
 require_once "PHPUnit/Framework/TestSuite.php";
 
+//make cvs testing work
+chdir(dirname(__FILE__) . '/../');
 require_once 'Net/Wifi.php';
 
 /**
