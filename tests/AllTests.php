@@ -20,7 +20,7 @@ class Net_Wifi_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Net_WifiTest');
+        $suite = new PHPUnit_Framework_TestSuite('Net_Wifi Tests');
         /** Add testsuites, if there is. */
         $suite->addTestSuite('Net_WifiTest');
 
