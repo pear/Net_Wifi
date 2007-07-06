@@ -1,9 +1,13 @@
 <?php
-
 /**
-*   Cell information from a wifi scan.
+* Cell information from a wifi scan.
 *
-*   @author Christian Weiske <cweiske@php.net>
+* @category Networking
+* @package  Net_Wifi
+* @author   Christian Weiske <cweiske@php.net>
+* @license  http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
+* @version  CVS: $Id$
+* @link     http://pear.php.net/package/Net_Wifi
 */
 class Net_Wifi_Cell
 {

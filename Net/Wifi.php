@@ -1,40 +1,25 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-/**
-*   A class for scanning wireless networks and identifying
-*   local wireless network interfaces.
-*
-*   PHP versions 4 and 5
-*
-*   LICENSE: This source file is subject to version 3.0 of the PHP license
-*   that is available through the world-wide-web at the following URI:
-*   http://www.php.net/license/3_0.txt.  If you did not receive a copy of
-*   the PHP License and are unable to obtain it through the web, please
-*   send a note to license@php.net so we can mail you a copy immediately.
-*
-*   @author Christian Weiske <cweiske@php.net>
-*   @category Networking
-*   @package Net_Wifi
-*   @license http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
-*   @version CVS: $Id$
-*/
-
 require_once 'Net/Wifi/Cell.php';
 require_once 'Net/Wifi/Config.php';
 //required for System::which() functionality
 require_once 'System.php';
 
 /**
-*   This class uses tools like iwconfig and iwlist to scan
-*   for wireless networks
+* A class for scanning wireless networks and identifying
+* local wireless network interfaces.
 *
-*   @author Christian Weiske <cweiske@php.net>
+* @category Networking
+* @package  Net_Wifi
+* @author   Christian Weiske <cweiske@php.net>
+* @license  http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
+* @version  CVS: $Id$
+* @link     http://pear.php.net/package/Net_Wifi
 */
 class Net_Wifi
 {
     /**
-    *   Various locations of programs
-    *   @var array
+    * Various locations of programs
+    * @var array
     */
     var $arFileLocation = array(
         'iwconfig'           => '/usr/sbin/iwconfig',
@@ -45,7 +30,7 @@ class Net_Wifi
 
 
     /**
-    *   Constructor which tries to guess the paths of the tools
+    * Constructor which tries to guess the paths of the tools
     */
     function Net_Wifi()
     {
@@ -68,11 +53,13 @@ class Net_Wifi
 
 
     /**
-    *   Returns an object with the current state of the interface (connected/not connected, AP,...).
+    * Returns an object with the current state of the interface
+    * (connected/not connected, AP,...).
     *
-    *   @access public
-    *   @param  string           The interface to check
-    *   @return Net_Wifi_Config  The state information
+    * @param  string $strInterface  The interface to check
+    *
+    * @return Net_Wifi_Config  The state information
+    * @access public
     */
     function getCurrentConfig($strInterface)
     {
@@ -87,11 +74,11 @@ class Net_Wifi
 
 
     /**
-    *   Parses the iwconfig output to collect the current config information.
+    * Parses the iwconfig output to collect the current config information.
     *
-    *   @access protected
-    *   @param  string           The iwconfig output to parse
-    *   @return Net_Wifi_Config  The current config object
+    * @access protected
+    * @param  string $strAll          The iwconfig output to parse
+    * @return Net_Wifi_Config  The current config object
     */
     function parseCurrentConfig($strAll)
     {
