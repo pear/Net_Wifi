@@ -4,7 +4,7 @@
 *   @author Christian Weiske <cweiske@php.net>
 */
 
-require_once('Net/Wifi.php');
+require_once 'Net/Wifi.php';
 $wifi = new Net_Wifi();
 
 //get all wireless interfaces

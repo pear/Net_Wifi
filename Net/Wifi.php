@@ -13,10 +13,10 @@
 *   send a note to license@php.net so we can mail you a copy immediately.
 *
 *   @author Christian Weiske <cweiske@php.net>
-*   @category Net
-*   @package Net
-*   @license    http://www.php.net/license/3_0.txt  PHP License 3.0
-*   @version    CVS: $Id$
+*   @category Networking
+*   @package Net_Wifi
+*   @license http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
+*   @version CVS: $Id$
 */
 
 require_once 'Net/Wifi/Cell.php';

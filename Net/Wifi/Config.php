@@ -1,9 +1,13 @@
 <?php
-
 /**
-*   Configuration settings of a wifi network interface.
+* Configuration settings of a wifi network interface.
 *
-*   @author Christian Weiske <cweiske@php.net>
+* @category Networking
+* @package  Net_Wifi
+* @author   Christian Weiske <cweiske@php.net>
+* @license  http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
+* @version  CVS: $Id$
+* @link     http://pear.php.net/package/Net_Wifi
 */
 class Net_Wifi_Config
 {
