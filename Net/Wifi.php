@@ -152,11 +152,11 @@ class Net_Wifi
 
 
     /**
-    *   Checks if a network interface is connected to an access point.
+    * Checks if a network interface is connected to an access point.
     *
-    *   @access public
-    *   @param  string      The network interface to check
-    *   @return boolean     If the interface is connected
+    * @access public
+    * @param  string      The network interface to check
+    * @return boolean     If the interface is connected
     */
     function isConnected($strInterface)
     {
@@ -168,10 +168,10 @@ class Net_Wifi
 
 
     /**
-    *   Returns an array with the names/device files of all supported wireless lan devices.
+    * Returns an array with the names/device files of all supported wireless lan devices.
     *
-    *   @access public
-    *   @return array   Array with wireless interfaces as values
+    * @access public
+    * @return array   Array with wireless interfaces as values
     */
     function getSupportedInterfaces()
     {
@@ -209,11 +209,11 @@ class Net_Wifi
 
 
     /**
-    *   Scans for access points / ad hoc cells and returns them.
+    * Scans for access points / ad hoc cells and returns them.
     *
-    *   @access public
-    *   @param  string  The interface to use
-    *   @return array   Array with cell information objects (Net_Wifi_Cell)
+    * @access public
+    * @param  string  The interface to use
+    * @return array   Array with cell information objects (Net_Wifi_Cell)
     */
     function scan($strInterface)
     {
@@ -226,11 +226,11 @@ class Net_Wifi
 
 
     /**
-    *   Parses the output of iwlist and returns the recognized cells.
+    * Parses the output of iwlist and returns the recognized cells.
     *
-    *   @access protected
-    *   @param  array       Lines of the iwlist output as an array
-    *   @return array       Array with cell information objects
+    * @access protected
+    * @param  array       Lines of the iwlist output as an array
+    * @return array       Array with cell information objects
     */
     function parseScan($arLines)
     {
@@ -414,17 +414,17 @@ class Net_Wifi
 
 
     /**
-    *   Tells the driver to use the access point with the given MAC address only.
+    * Tells the driver to use the access point with the given MAC address only.
     *
-    *   You can use "off" to enable automatic mode again without
-    *   changing the current AP, or "any" resp. "auto" to force
-    *   the card to re-associate with the currently best AP
+    * You can use "off" to enable automatic mode again without
+    * changing the current AP, or "any" resp. "auto" to force
+    * the card to re-associate with the currently best AP
     *
-    *   EXPERIMENTAL! WILL CHANGE IN FUTURE VERSIONS
-    *   @access public
-    *   @param  string      The interface to use
-    *   @param  string      The mac address of the access point
-    *   @return boolean     True if setting was ok, false if not
+    * EXPERIMENTAL! WILL CHANGE IN FUTURE VERSIONS
+    * @access public
+    * @param  string      The interface to use
+    * @param  string      The mac address of the access point
+    * @return boolean     True if setting was ok, false if not
     */
     function connectToAccessPoint($strInterface, $strMac)
     {
@@ -438,15 +438,15 @@ class Net_Wifi
 
 
     /**
-    *   and now some dumb getters and setters
+    * and now some dumb getters and setters
     */
 
 
 
     /**
-    *   Returns the set path to /proc/wireless.
-    *   @access public
-    *   @return string      The path to "/proc/net/wireless"
+    * Returns the set path to /proc/wireless.
+    * @access public
+    * @return string      The path to "/proc/net/wireless"
     */
     function getPathProcWireless()
     {
@@ -456,9 +456,9 @@ class Net_Wifi
 
 
     /**
-    *   Returns the set path to /proc/net/wireless.
-    *   @access public
-    *   @param  string      The new /proc/net/wireless path
+    * Returns the set path to /proc/net/wireless.
+    * @access public
+    * @param  string      The new /proc/net/wireless path
     */
     function setPathProcWireless( $strProcWireless)
     {
@@ -468,9 +468,9 @@ class Net_Wifi
 
 
     /**
-    *   Returns the set path to iwconfig.
-    *   @access public
-    *   @return string      The path to iwconfig
+    * Returns the set path to iwconfig.
+    * @access public
+    * @return string      The path to iwconfig
     */
     function getPathIwconfig()
     {
@@ -480,21 +480,22 @@ class Net_Wifi
 
 
     /**
-    *   Returns the set path to iwconfig.
-    *   @access public
-    *   @param  string      The new ifwconfig path
+    * Returns the set path to iwconfig.
+    * @access public
+    * @param  string      The new ifwconfig path
     */
-    function setPathIwconfig( $strPathIwconfig)
+    function setPathIwconfig $strPathIwconfig)
     {
         $this->arFileLocation['iwconfig'] = $strPathIwconfig;
-    }//function setPathIwconfig( $strPathIwconfig)
+    }//function setPathIwconfig($strPathIwconfig)
 
 
 
     /**
-    *   Returns the set path to iwlist.
-    *   @access public
-    *   @return string      The path to iwlist
+    * Returns the set path to iwlist.
+    *
+    * @return string The path to iwlist
+    * @access public
     */
     function getPathIwlist()
     {
@@ -504,14 +505,17 @@ class Net_Wifi
 
 
     /**
-    *   Returns the set path to iwlist.
-    *   @access public
-    *   @param  string      The new iwlist path
+    * Returns the set path to iwlist.
+    *
+    * @param string $strPathIwlist The new iwlist path
+    *
+    * @return void
+    * @access public
     */
-    function setPathIwlist( $strPathIwlist)
+    function setPathIwlist($strPathIwlist)
     {
         $this->arFileLocation['iwlist'] = $strPathIwlist;
-    }//function setPathIwlist( $strPathIwlist)
+    }//function setPathIwlist($strPathIwlist)
 
 
 }//class Net_Wifi
