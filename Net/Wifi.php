@@ -56,16 +56,17 @@ class Net_Wifi
     * Returns an object with the current state of the interface
     * (connected/not connected, AP,...).
     *
-    * @param  string $strInterface  The interface to check
+    * @param string $strInterface The interface to check
     *
-    * @return Net_Wifi_Config  The state information
+    * @return Net_Wifi_Config The state information
     * @access public
     */
     function getCurrentConfig($strInterface)
     {
         //get the plain config
         $arLines = array();
-        exec($this->arFileLocation['iwconfig'] . ' ' . escapeshellarg($strInterface), $arLines);
+        exec($this->arFileLocation['iwconfig'] . ' '
+            . escapeshellarg($strInterface), $arLines);
         $strAll = implode("\n", $arLines);
 
         return $this->parseCurrentConfig($strAll);
@@ -76,9 +77,10 @@ class Net_Wifi
     /**
     * Parses the iwconfig output to collect the current config information.
     *
-    * @access protected
-    * @param  string $strAll          The iwconfig output to parse
+    * @param string $strAll The iwconfig output to parse
+    *
     * @return Net_Wifi_Config  The current config object
+    * @access protected
     */
     function parseCurrentConfig($strAll)
     {
@@ -154,9 +156,10 @@ class Net_Wifi
     /**
     * Checks if a network interface is connected to an access point.
     *
+    * @param string $strInterface The network interface to check
+    *
+    * @return boolean If the interface is connected
     * @access public
-    * @param  string      The network interface to check
-    * @return boolean     If the interface is connected
     */
     function isConnected($strInterface)
     {
@@ -168,7 +171,8 @@ class Net_Wifi
 
 
     /**
-    * Returns an array with the names/device files of all supported wireless lan devices.
+    * Returns an array with the names/device files of
+    *  all supported wireless lan devices.
     *
     * @access public
     * @return array   Array with wireless interfaces as values
@@ -184,7 +188,7 @@ class Net_Wifi
             //begin with 3rd line
             if (count($arLines) > 2) {
                 for ($nA = 2; $nA < count($arLines); $nA++) {
-                    $nPos = strpos($arLines[$nA], ':', 0);
+                    $nPos         = strpos($arLines[$nA], ':', 0);
                     $strInterface = trim(substr($arLines[$nA], 0, $nPos));
                     $arWirelessInterfaces[] = $strInterface;
                 }
@@ -196,9 +200,12 @@ class Net_Wifi
             $arLines = array();
             exec($this->arFileLocation['iwconfig'], $arLines);
             foreach ($arLines as $strLine) {
-                if (trim($strLine[0]) != '' && strpos($strLine, 'no wireless extensions') === false) {
+                if (trim($strLine[0]) != ''
+                    && strpos($strLine, 'no wireless extensions') === false
+                ) {
                     //there is something
-                    $arWirelessInterfaces[] = substr($strLine, 0, strpos($strLine, ' '));
+                    $arWirelessInterfaces[]
+                        = substr($strLine, 0, strpos($strLine, ' '));
                 }
             }//foreach line
         }//use iwconfig
@@ -211,14 +218,16 @@ class Net_Wifi
     /**
     * Scans for access points / ad hoc cells and returns them.
     *
+    * @param string $strInterface The interface to use
+    *
+    * @return array Array with cell information objects (Net_Wifi_Cell)
     * @access public
-    * @param  string  The interface to use
-    * @return array   Array with cell information objects (Net_Wifi_Cell)
     */
     function scan($strInterface)
     {
         $arLines = array();
-        exec($this->arFileLocation['iwlist'] . ' ' . escapeshellarg($strInterface) . ' scanning', $arLines);
+        exec($this->arFileLocation['iwlist'] . ' '
+            . escapeshellarg($strInterface) . ' scanning', $arLines);
 
         return $this->parseScan( $arLines);
     }//function scan($strInterface)
@@ -228,9 +237,10 @@ class Net_Wifi
     /**
     * Parses the output of iwlist and returns the recognized cells.
     *
+    * @param array $arLines Lines of the iwlist output as an array
+    *
+    * @return array Array with cell information objects
     * @access protected
-    * @param  array       Lines of the iwlist output as an array
-    * @return array       Array with cell information objects
     */
     function parseScan($arLines)
     {
@@ -243,9 +253,9 @@ class Net_Wifi
         $bStandaloneRates = false;
 
         //split into cells
-        $arCells = array();
+        $arCells      = array();
         $nCurrentCell = -1;
-        $nCount = count($arLines);
+        $nCount       = count($arLines);
         for ($nA = 1; $nA < $nCount; $nA++) {
             $strLine = trim($arLines[$nA]);
             if ($strLine == '') {
@@ -277,134 +287,139 @@ class Net_Wifi
             $strId    = strtolower(substr($strLine, 0, $nPos - 1));
             $strValue = trim(substr($strLine, $nPos));
             switch ($strId) {
-                case 'address':
-                    $arCells[$nCurrentCell]->mac = $strValue;
-                    break;
+            case 'address':
+                $arCells[$nCurrentCell]->mac = $strValue;
+                break;
 
-                case 'essid':
-                    if ($strValue[0] == '"') {
-                        //has quotes around
-                        $arCells[$nCurrentCell]->ssid = substr($strValue, 1, -1);
-                    } else {
-                        $arCells[$nCurrentCell]->ssid = $strValue;
-                    }
-                    break;
+            case 'essid':
+                if ($strValue[0] == '"') {
+                    //has quotes around
+                    $arCells[$nCurrentCell]->ssid = substr($strValue, 1, -1);
+                } else {
+                    $arCells[$nCurrentCell]->ssid = $strValue;
+                }
+                break;
 
-                case 'bit rate':
-                    $nRate = floatval(substr($strValue, 0, strpos($strValue, 'Mb/s')));
-                    $arCells[$nCurrentCell]->rate    = $nRate;
-                    $arCells[$nCurrentCell]->rates[] = $nRate;
-                    break;
+            case 'bit rate':
+                $nRate = floatval(substr($strValue, 0, strpos($strValue, 'Mb/s')));
+                $arCells[$nCurrentCell]->rate    = $nRate;
+                $arCells[$nCurrentCell]->rates[] = $nRate;
+                break;
 
-                case 'bit rates':
-                    $bStandaloneRates = true;
-                    $arLines[$nA] = $strValue;
-                    $nA--;//go back one so that this line is re-parsed
-                    break;
+            case 'bit rates':
+                $bStandaloneRates = true;
+                $arLines[$nA]     = $strValue;
+                $nA--;//go back one so that this line is re-parsed
+                break;
 
-                case 'protocol':
-                    if (substr($strValue, 0, 5) == 'IEEE ') {
-                        $strValue = substr($strValue, 5);
-                    }
-                    $arCells[$nCurrentCell]->protocol = $strValue;
-                    break;
+            case 'protocol':
+                if (substr($strValue, 0, 5) == 'IEEE ') {
+                    $strValue = substr($strValue, 5);
+                }
+                $arCells[$nCurrentCell]->protocol = $strValue;
+                break;
 
-                case 'channel':
-                    $arCells[$nCurrentCell]->channel = intval($strValue);
-                    break;
+            case 'channel':
+                $arCells[$nCurrentCell]->channel = intval($strValue);
+                break;
 
-                case 'encryption key':
-                    if ($strValue == 'on') {
-                        $arCells[$nCurrentCell]->encryption = true;
-                    } else {
-                        $arCells[$nCurrentCell]->encryption = false;
-                    }
-                    break;
+            case 'encryption key':
+                if ($strValue == 'on') {
+                    $arCells[$nCurrentCell]->encryption = true;
+                } else {
+                    $arCells[$nCurrentCell]->encryption = false;
+                }
+                break;
 
-                case 'mode':
-                    if (strtolower($strValue) == 'master') {
-                        $arCells[$nCurrentCell]->mode = 'master';
-                    } else {
-                        $arCells[$nCurrentCell]->mode = 'ad-hoc';
-                    }
-                    break;
+            case 'mode':
+                if (strtolower($strValue) == 'master') {
+                    $arCells[$nCurrentCell]->mode = 'master';
+                } else {
+                    $arCells[$nCurrentCell]->mode = 'ad-hoc';
+                }
+                break;
 
-                case 'signal level':
-                    $arCells[$nCurrentCell]->rssi = substr($strValue, 0, strpos($strValue, ' '));
-                    break;
+            case 'signal level':
+                $arCells[$nCurrentCell]->rssi
+                    = substr($strValue, 0, strpos($strValue, ' '));
+                break;
 
-                case 'quality':
-                    $arData = explode('  ', $strValue);
-                    $arCells[$nCurrentCell]->quality = $arData[0];
-                    if (trim($arData[1]) != '') {
-                        //bad hack
-                        $arLines[$nA] = $arData[1];
+            case 'quality':
+                $arData                          = explode('  ', $strValue);
+                $arCells[$nCurrentCell]->quality = $arData[0];
+                if (trim($arData[1]) != '') {
+                    //bad hack
+                    $arLines[$nA] = $arData[1];
+                    $nA--;
+                    if (isset($arData[2])) {
+                        $arLines[$nA - 1] = $arData[1];
                         $nA--;
-                        if (isset($arData[2])) {
-                            $arLines[$nA - 1] = $arData[1];
-                            $nA--;
-                        }
+                    }
+                }
+                break;
+
+            case 'frequency':
+                $arCells[$nCurrentCell]->frequency = $strValue;
+                break;
+
+            case 'extra':
+                $nPos     = strpos($strValue, ':');
+                $strSubId = strtolower(trim(substr($strValue, 0, $nPos)));
+                $strValue = trim(substr($strValue, $nPos + 1));
+                switch ($strSubId) {
+                case 'rates (mb/s)':
+                    //1 2 5.5 11 54
+                    $arRates = explode(' ', $strValue);
+                    //convert to float values
+                    foreach ($arRates as $nB => $strRate) {
+                        $arCells[$nCurrentCell]->rates[$nB] = floatval($strRate);
                     }
                     break;
 
-                case 'frequency':
-                    $arCells[$nCurrentCell]->frequency = $strValue;
+                case 'signal':
+                case 'rssi':
+                    //-53 dBm
+                    $arCells[$nCurrentCell]->rssi
+                        = intval(substr($strValue, 0, strpos($strValue, ' ')));
                     break;
 
-                case 'extra':
-                    $nPos     = strpos($strValue, ':');
-                    $strSubId = strtolower(trim(substr($strValue, 0, $nPos)));
-                    $strValue = trim(substr($strValue, $nPos + 1));
-                    switch ($strSubId) {
-                        case 'rates (mb/s)':
-                            //1 2 5.5 11 54
-                            $arRates = explode(' ', $strValue);
-                            //convert to float values
-                            foreach ($arRates as $nB => $strRate) {
-                                $arCells[$nCurrentCell]->rates[$nB] = floatval($strRate);
-                            }
-                            break;
-
-                        case 'signal':
-                        case 'rssi':
-                            //-53 dBm
-                            $arCells[$nCurrentCell]->rssi = intval(substr($strValue, 0, strpos($strValue, ' ')));
-                            break;
-
-                        case 'last beacon':
-                            //25ms ago
-                            $arCells[$nCurrentCell]->beacon = intval(substr($strValue, 0, strpos($strValue, 'ms')));
-                            break;
-
-                        default:
-                            echo 'unknown iwconfig extra information: ' . $strSubId . "\r\n";
-                            break;
-                    }
+                case 'last beacon':
+                    //25ms ago
+                    $arCells[$nCurrentCell]->beacon
+                        = intval(substr($strValue, 0, strpos($strValue, 'ms')));
                     break;
 
                 default:
-                    if ($bStandaloneRates) {
-                        if (preg_match_all('|([0-9.]+) Mb/s|', $strLine, $arMatches) > 0) {
-                            foreach ($arMatches[1] as $nRate) {
-                                $nRate = floatval($nRate);
-                                $arCells[$nCurrentCell]->rate    = $nRate;
-                                $arCells[$nCurrentCell]->rates[] = $nRate;
-                            }
-                            break;
-                        }
-                    }
-                    echo 'unknown iwconfig information: ' . $strId . "\r\n";
+                    echo 'unknown iwconfig extra information: ' . $strSubId . "\r\n";
                     break;
+                }
+                break;
+
+            default:
+                if ($bStandaloneRates) {
+                    if (preg_match_all('|([0-9.]+) Mb/s|', $strLine, $arMatches) > 0) {
+                        foreach ($arMatches[1] as $nRate) {
+                            $nRate                           = floatval($nRate);
+                            $arCells[$nCurrentCell]->rate    = $nRate;
+                            $arCells[$nCurrentCell]->rates[] = $nRate;
+                        }
+                        break;
+                    }
+                }
+                echo 'unknown iwconfig information: ' . $strId . "\r\n";
+                break;
             }
         }//foreach line
 
 
         //not all outputs are sorted (note the 6)
         //Extra: Rates (Mb/s): 1 2 5.5 9 11 6 12 18 24 36 48 54
-        //additionally, some drivers have many single "Bit Rate:" fields instead of one big one
+        //additionally, some drivers have many single "Bit Rate:"
+        // fields instead of one big one
         foreach ($arCells as $nCurrentCell => $arData) {
             sort($arCells[$nCurrentCell]->rates);
-            $arCells[$nCurrentCell]->rates = array_unique($arCells[$nCurrentCell]->rates);
+            $arCells[$nCurrentCell]->rates
+                = array_unique($arCells[$nCurrentCell]->rates);
         }
 
 
@@ -421,16 +436,19 @@ class Net_Wifi
     * the card to re-associate with the currently best AP
     *
     * EXPERIMENTAL! WILL CHANGE IN FUTURE VERSIONS
+    *
+    * @param string $strInterface The interface to use
+    * @param string $strMac       The mac address of the access point
+    *
+    * @return boolean True if setting was ok, false if not
     * @access public
-    * @param  string      The interface to use
-    * @param  string      The mac address of the access point
-    * @return boolean     True if setting was ok, false if not
     */
     function connectToAccessPoint($strInterface, $strMac)
     {
-        $arLines = array();
+        $arLines    = array();
         $nReturnVar = 0;
-        exec($this->arFileLocation['iwconfig'] . ' ' . escapeshellarg($strInterface) . ' ap ' . escapeshellarg($strMac), $arLines, $nReturnVar);
+        exec($this->arFileLocation['iwconfig'] . ' ' . escapeshellarg($strInterface)
+             . ' ap ' . escapeshellarg($strMac), $arLines, $nReturnVar);
 
         return $nReturnVar == 0;
     }//function connectToAccessPoint($strInterface, $strMac)
@@ -445,8 +463,9 @@ class Net_Wifi
 
     /**
     * Returns the set path to /proc/wireless.
+    *
+    * @return string The path to "/proc/net/wireless"
     * @access public
-    * @return string      The path to "/proc/net/wireless"
     */
     function getPathProcWireless()
     {
@@ -457,20 +476,23 @@ class Net_Wifi
 
     /**
     * Returns the set path to /proc/net/wireless.
+    *
+    * @param string $strProcWireless The new /proc/net/wireless path
+    *
     * @access public
-    * @param  string      The new /proc/net/wireless path
     */
-    function setPathProcWireless( $strProcWireless)
+    function setPathProcWireless($strProcWireless)
     {
         $this->arFileLocation['/proc/net/wireless'] = $strProcWireless;
-    }//function setPathProcWireless( $strProcWireless)
+    }//function setPathProcWireless($strProcWireless)
 
 
 
     /**
     * Returns the set path to iwconfig.
+    *
+    * @return string The path to iwconfig
     * @access public
-    * @return string      The path to iwconfig
     */
     function getPathIwconfig()
     {
@@ -481,10 +503,12 @@ class Net_Wifi
 
     /**
     * Returns the set path to iwconfig.
+    *
+    * @param string $strPathIwconfig The new ifwconfig path
+    *
     * @access public
-    * @param  string      The new ifwconfig path
     */
-    function setPathIwconfig $strPathIwconfig)
+    function setPathIwconfig($strPathIwconfig)
     {
         $this->arFileLocation['iwconfig'] = $strPathIwconfig;
     }//function setPathIwconfig($strPathIwconfig)
@@ -495,6 +519,7 @@ class Net_Wifi
     * Returns the set path to iwlist.
     *
     * @return string The path to iwlist
+    *
     * @access public
     */
     function getPathIwlist()
