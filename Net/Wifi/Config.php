@@ -2,11 +2,23 @@
 /**
 * Configuration settings of a wifi network interface.
 *
+* PHP Versions 4 and 5
+*
 * @category Networking
 * @package  Net_Wifi
 * @author   Christian Weiske <cweiske@php.net>
 * @license  http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
 * @version  CVS: $Id$
+* @link     http://pear.php.net/package/Net_Wifi
+*/
+
+/**
+* Configuration settings of a wifi network interface.
+*
+* @category Networking
+* @package  Net_Wifi
+* @author   Christian Weiske <cweiske@php.net>
+* @license  http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
 * @link     http://pear.php.net/package/Net_Wifi
 */
 class Net_Wifi_Config

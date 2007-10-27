@@ -1,4 +1,17 @@
 <?php
+/**
+ * Configuration settings of a wifi network interface.
+ *
+ * PHP Versions 4 and 5
+ *
+ * @category Networking
+ * @package  Net_Wifi
+ * @author   Christian Weiske <cweiske@php.net>
+ * @license  http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
+ * @version  CVS: $Id$
+ * @link     http://pear.php.net/package/Net_Wifi
+ */
+
 require_once 'Net/Wifi/Cell.php';
 require_once 'Net/Wifi/Config.php';
 //required for System::which() functionality
@@ -12,11 +25,27 @@ require_once 'System.php';
 * @package  Net_Wifi
 * @author   Christian Weiske <cweiske@php.net>
 * @license  http://www.gnu.org/copyleft/lesser.html  LGPL License 2.1
-* @version  CVS: $Id$
 * @link     http://pear.php.net/package/Net_Wifi
 */
 class Net_Wifi
 {
+    var $REG_ACCESS_POINT         = '/Access Point: ([0-9:A-F]{17})/';
+    var $REG_BIT_RATE             = '/Bit Rate[:=]([0-9.]+) [mk]b\\/s/i';
+    var $REG_ESSID                = '/ESSID:"([^"]+)"/';
+    var $REG_INVALID_MISC         = '/Invalid misc[:=](-?[0-9]+)/';
+    var $REG_MISSED_BEACON        = '/Missed beacon[:=](-?[0-9]+)/';
+    var $REG_NICKNAME             = '/Nickname:"([^"]+)"/';
+    var $REG_NOISE_LEVEL          = '/Noise level[:=](-?[0-9]+) dBm/';
+    var $REG_POWER                = '/Power[:=]([0-9]+) dBm/';
+    var $REG_PROTOCOL_1           = '/IEEE ([0-9.]+[a-z])/';
+    var $REG_PROTOCOL_2           = '/([0-9.]+[a-z])\s+linked\s+ESSID/';
+    var $REG_RATES                = '|([0-9.]+) Mb/s|';
+    var $REG_RX_INVALID_CRYPT     = '/Rx invalid crypt[:=](-?[0-9]+)/';
+    var $REG_RX_INVALID_FRAG      = '/Rx invalid frag[:=](-?[0-9]+)/';
+    var $REG_RX_INVALID_NWID      = '/Rx invalid nwid[:=](-?[0-9]+)/';
+    var $REG_SIGNAL_LEVEL         = '/Signal level[:=](-?[0-9]+) dBm/';
+    var $REG_TX_EXCESSIVE_RETRIES = '/Tx excessive retries[:=](-?[0-9]+)/';
+
     /**
     * Various locations of programs
     * @var array
@@ -87,13 +116,13 @@ class Net_Wifi
         $objConfig = new Net_Wifi_Config();
 
         $arMatches = array();
-        if (preg_match('/ESSID:"([^"]+)"/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_ESSID, $strAll, $arMatches)) {
             $objConfig->ssid = $arMatches[1];
         }
-        if (preg_match('/Access Point: ([0-9:A-F]{17})/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_ACCESS_POINT, $strAll, $arMatches)) {
             $objConfig->ap = $arMatches[1];
         }
-        if (preg_match('/Nickname:"([^"]+)"/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_NICKNAME, $strAll, $arMatches)) {
             $objConfig->nick = $arMatches[1];
         }
         if (strpos($strAll, 'Mode:Managed')) {
@@ -101,40 +130,40 @@ class Net_Wifi
         } else if (strpos($strAll, 'Mode:Ad-Hoc')) {
             $objConfig->mode = 'ad-hoc';
         }
-        if (preg_match('/Bit Rate[:=]([0-9.]+) [mk]b\\/s/i', $strAll, $arMatches)) {
+        if (preg_match($this->REG_BIT_RATE, $strAll, $arMatches)) {
             $objConfig->rate = $arMatches[1];
         }
-        if (preg_match('/Power[:=]([0-9]+) dBm/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_POWER, $strAll, $arMatches)) {
             $objConfig->power = $arMatches[1];
         }
-        if (preg_match('/Signal level[:=](-?[0-9]+) dBm/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_SIGNAL_LEVEL, $strAll, $arMatches)) {
             $objConfig->rssi = $arMatches[1];
         }
-        if (preg_match('/Noise level[:=](-?[0-9]+) dBm/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_NOISE_LEVEL, $strAll, $arMatches)) {
             $objConfig->noise = $arMatches[1];
         }
-        if (preg_match('/IEEE ([0-9.]+[a-z])/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_PROTOCOL_1, $strAll, $arMatches)) {
             $objConfig->protocol = $arMatches[1];
-        } else if (preg_match('/([0-9.]+[a-z])\s+linked\s+ESSID/', $strAll, $arMatches)) {
+        } elseif (preg_match($this->REG_PROTOCOL_2, $strAll, $arMatches)) {
             $objConfig->protocol = $arMatches[1];
         }
 
-        if (preg_match('/Rx invalid nwid[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_RX_INVALID_NWID, $strAll, $arMatches)) {
             $objConfig->packages_rx_invalid_nwid = $arMatches[1];
         }
-        if (preg_match('/Rx invalid crypt[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_RX_INVALID_CRYPT, $strAll, $arMatches)) {
             $objConfig->packages_rx_invalid_crypt = $arMatches[1];
         }
-        if (preg_match('/Rx invalid frag[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_RX_INVALID_FRAG, $strAll, $arMatches)) {
             $objConfig->packages_rx_invalid_frag = $arMatches[1];
         }
-        if (preg_match('/Tx excessive retries[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_TX_EXCESSIVE_RETRIES, $strAll, $arMatches)) {
             $objConfig->packages_tx_excessive_retries = $arMatches[1];
         }
-        if (preg_match('/Invalid misc[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_INVALID_MISC, $strAll, $arMatches)) {
             $objConfig->packages_invalid_misc = $arMatches[1];
         }
-        if (preg_match('/Missed beacon[:=](-?[0-9]+)/', $strAll, $arMatches)) {
+        if (preg_match($this->REG_MISSED_BEACON, $strAll, $arMatches)) {
             $objConfig->packages_missed_beacon = $arMatches[1];
         }
 
@@ -190,6 +219,7 @@ class Net_Wifi
                 for ($nA = 2; $nA < count($arLines); $nA++) {
                     $nPos         = strpos($arLines[$nA], ':', 0);
                     $strInterface = trim(substr($arLines[$nA], 0, $nPos));
+                    //assign interface
                     $arWirelessInterfaces[] = $strInterface;
                 }
             }//we've got more than 2 lines
@@ -229,7 +259,7 @@ class Net_Wifi
         exec($this->arFileLocation['iwlist'] . ' '
             . escapeshellarg($strInterface) . ' scanning', $arLines);
 
-        return $this->parseScan( $arLines);
+        return $this->parseScan($arLines);
     }//function scan($strInterface)
 
 
@@ -267,9 +297,8 @@ class Net_Wifi
                 $nCurrentCell++;
                 //get cell number
                 $nCell = substr($strLine, 5, strpos($strLine, ' ', 5) - 5);
-                $arCells[$nCurrentCell] = new Net_Wifi_Cell();
-
-
+                //add new cell
+                $arCells[$nCurrentCell]       = new Net_Wifi_Cell();
                 $arCells[$nCurrentCell]->cell = $nCell;
 
                 //remove cell information from line for further interpreting
@@ -302,6 +331,7 @@ class Net_Wifi
 
             case 'bit rate':
                 $nRate = floatval(substr($strValue, 0, strpos($strValue, 'Mb/s')));
+                //assign rate.
                 $arCells[$nCurrentCell]->rate    = $nRate;
                 $arCells[$nCurrentCell]->rates[] = $nRate;
                 break;
@@ -397,7 +427,7 @@ class Net_Wifi
 
             default:
                 if ($bStandaloneRates) {
-                    if (preg_match_all('|([0-9.]+) Mb/s|', $strLine, $arMatches) > 0) {
+                    if (preg_match_all($this->REG_RATES, $strLine, $arMatches) > 0) {
                         foreach ($arMatches[1] as $nRate) {
                             $nRate                           = floatval($nRate);
                             $arCells[$nCurrentCell]->rate    = $nRate;
@@ -475,10 +505,11 @@ class Net_Wifi
 
 
     /**
-    * Returns the set path to /proc/net/wireless.
+    * Set the path to /proc/net/wireless.
     *
     * @param string $strProcWireless The new /proc/net/wireless path
     *
+    * @return null
     * @access public
     */
     function setPathProcWireless($strProcWireless)
@@ -502,10 +533,11 @@ class Net_Wifi
 
 
     /**
-    * Returns the set path to iwconfig.
+    * Set the path to iwconfig.
     *
     * @param string $strPathIwconfig The new ifwconfig path
     *
+    * @return null
     * @access public
     */
     function setPathIwconfig($strPathIwconfig)
