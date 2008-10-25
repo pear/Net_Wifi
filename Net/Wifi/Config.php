@@ -31,13 +31,13 @@ class Net_Wifi_Config
     *    if this setting is false, but not that it's activated if it's true
     *   @var boolean
     */
-    var $activated  = true;
+    var $activated = true;
 
     /**
     *   MAC address of the associated access point.
     *   @var string
     */
-    var $ap         = null;
+    var $ap = null;
 
     /**
     *   If the interface is connected to an access point or an ad-hoc network.
@@ -50,21 +50,21 @@ class Net_Wifi_Config
     *   Can be "master" or "ad-hoc" (without quotes)
     *   @var string
     */
-    var $mode       = null;
+    var $mode = null;
 
     /**
     *   The nickname which the interface (computer) uses.
     *   Something like a computer name
     *   @var string
     */
-    var $nick       = null;
+    var $nick = null;
 
     /**
     *   Noise level in dBm - how much the signal is disturbed
     *   example: -249
     *   @var int
     */
-    var $noise      = null;
+    var $noise = null;
 
     /**
     *   Other packets lost in relation with specific wireless operations.
@@ -117,27 +117,27 @@ class Net_Wifi_Config
     *   Power setting of the interface.
     *   @var int
     */
-    var $power      = null;
+    var $power = null;
 
     /**
     *   Protocol version which is used for connection.
     *   example: "IEEE 802.11g" without quotes
     *   @var string
     */
-    var $protocol   = null;
+    var $protocol = null;
 
     /**
     *   The bit rate of the connection.
     *   @var float
     */
-    var $rate       = null;
+    var $rate = null;
 
     /**
     *   Signal strength in dBm.
     *   example: -59
     *   @var int
     */
-    var $rssi       = null;
+    var $rssi = null;
 
     /**
     *   "Service Set IDentifier" of the cell which identifies current network.
@@ -145,7 +145,7 @@ class Net_Wifi_Config
     *   example: "My Network" (without quotes)
     *   @var string
     */
-    var $ssid       = null;
+    var $ssid = null;
 
 }//class Net_Wifi_Config
 ?>
