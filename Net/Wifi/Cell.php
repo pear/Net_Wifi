@@ -81,6 +81,7 @@ class Net_Wifi_Cell
 
     /**
     *   Bit rate which is used (when connected).
+    *   May be set when not connected!
     *   @var float
     */
     var $rate = null;
@@ -103,6 +104,7 @@ class Net_Wifi_Cell
     *   @var int
     */
     var $beacon = null;
+
 }//class Net_Wifi_Cell
 
 ?>

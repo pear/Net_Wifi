@@ -56,6 +56,17 @@ class Net_Wifi
         '/proc/net/wireless' => '/proc/net/wireless'
     );
 
+    /**
+     * How to handle unknown lines in iwconfig output
+     * - 'echo':  Echo to stderr
+     * - $object: Log to object with debug priority.
+     *            assume 'Log' instance
+     * - null:    Ignore unknowns
+     *
+     * @var string
+     */
+    var $unknowns = null;
+
 
 
     /**
@@ -389,7 +400,16 @@ class Net_Wifi
                 break;
 
             case 'frequency':
-                $arCells[$nCurrentCell]->frequency = $strValue;
+                if (preg_match(
+                        '/([0-9.]+ GHz) \(Channel ([0-9])\)/',
+                        $strValue, $arMatches
+                    )
+                ) {
+                    $arCells[$nCurrentCell]->frequency = $arMatches[1];
+                    $arCells[$nCurrentCell]->channel   = $arMatches[2];
+                } else {
+                    $arCells[$nCurrentCell]->frequency = $strValue;
+                }
                 break;
 
             case 'extra':
@@ -420,7 +440,7 @@ class Net_Wifi
                     break;
 
                 default:
-                    echo 'unknown iwconfig extra information: ' . $strSubId . "\r\n";
+                    $this->handleUnknown(null, $strSubId);
                     break;
                 }
                 break;
@@ -436,7 +456,7 @@ class Net_Wifi
                         break;
                     }
                 }
-                echo 'unknown iwconfig information: ' . $strId . "\r\n";
+                $this->handleUnknown($strId, null);
                 break;
             }
         }//foreach line
@@ -482,6 +502,37 @@ class Net_Wifi
 
         return $nReturnVar == 0;
     }//function connectToAccessPoint($strInterface, $strMac)
+
+
+
+    /**
+     * Handle unknown configuration lines.
+     *
+     * @param string $strId    iwconfig output prefix (i.e. 'frequency')
+     * @param string $strSubId iwconfig output value
+     *
+     * @return void
+     *
+     * @uses $unknowns
+     */
+    function handleUnknown($strId, $strSubId)
+    {
+        if ($this->unknowns === null) {
+            return;
+        }
+
+        if ($strId !== null) {
+            $strMsg = 'unknown iwconfig information: ' . $strId;
+        } else {
+            $strMsg = 'unknown iwconfig extra information: ' . $strSubId;
+        }
+
+        if ($this->unknowns == 'echo') {
+            fwrite(STDERR, $strMsg . "\r\n");
+        } else if (is_object($this->unknowns)) {
+            $this->unknowns->debug($strMsg);
+        }
+    }//function handleUnknown($strSubId)
 
 
 
