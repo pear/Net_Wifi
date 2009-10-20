@@ -105,12 +105,15 @@ class Net_Wifi
     {
         //get the plain config
         $arLines = array();
-        exec($this->arFileLocation['iwconfig'] . ' '
-            . escapeshellarg($strInterface), $arLines);
+        exec(
+            $this->arFileLocation['iwconfig'] . ' '
+            . escapeshellarg($strInterface),
+            $arLines
+        );
         $strAll = implode("\n", $arLines);
 
         return $this->parseCurrentConfig($strAll);
-    }//function getCurrentConfig($strInterface)
+    }//function getCurrentConfig(..)
 
 
 
@@ -184,12 +187,13 @@ class Net_Wifi
         }
 
         if (strpos($strAll, 'unassociated') === false
-            && $objConfig->ap != null && $objConfig->ap != '00:00:00:00:00:00') {
+            && $objConfig->ap != null && $objConfig->ap != '00:00:00:00:00:00'
+        ) {
             $objConfig->associated = true;
         }
 
         return $objConfig;
-    }//function parseCurrentConfig($strAll)
+    }//function parseCurrentConfig(..)
 
 
 
@@ -206,7 +210,7 @@ class Net_Wifi
         $objConfig = $this->getCurrentConfig($strInterface);
 
         return $objConfig->associated;
-    }//function isConnected($strInterface)
+    }//function isConnected(..)
 
 
 
@@ -267,11 +271,14 @@ class Net_Wifi
     function scan($strInterface)
     {
         $arLines = array();
-        exec($this->arFileLocation['iwlist'] . ' '
-            . escapeshellarg($strInterface) . ' scanning', $arLines);
+        exec(
+            $this->arFileLocation['iwlist'] . ' '
+            . escapeshellarg($strInterface) . ' scanning',
+            $arLines
+        );
 
         return $this->parseScan($arLines);
-    }//function scan($strInterface)
+    }//function scan(..)
 
 
 
@@ -400,11 +407,11 @@ class Net_Wifi
                 break;
 
             case 'frequency':
-                if (preg_match(
-                        '/([0-9.]+ GHz) \(Channel ([0-9])\)/',
-                        $strValue, $arMatches
-                    )
-                ) {
+                $match = preg_match(
+                    '/([0-9.]+ GHz) \(Channel ([0-9])\)/',
+                    $strValue, $arMatches
+                );
+                if ($match) {
                     $arCells[$nCurrentCell]->frequency = $arMatches[1];
                     $arCells[$nCurrentCell]->channel   = $arMatches[2];
                 } else {
@@ -474,7 +481,7 @@ class Net_Wifi
 
 
         return $arCells;
-    }//function parseScan($arLines)
+    }//function parseScan(..)
 
 
 
@@ -497,11 +504,15 @@ class Net_Wifi
     {
         $arLines    = array();
         $nReturnVar = 0;
-        exec($this->arFileLocation['iwconfig'] . ' ' . escapeshellarg($strInterface)
-             . ' ap ' . escapeshellarg($strMac), $arLines, $nReturnVar);
+        exec(
+            $this->arFileLocation['iwconfig'] . ' ' . escapeshellarg($strInterface)
+            . ' ap ' . escapeshellarg($strMac),
+            $arLines,
+            $nReturnVar
+        );
 
         return $nReturnVar == 0;
-    }//function connectToAccessPoint($strInterface, $strMac)
+    }//function connectToAccessPoint(..)
 
 
 
@@ -532,7 +543,7 @@ class Net_Wifi
         } else if (is_object($this->unknowns)) {
             $this->unknowns->debug($strMsg);
         }
-    }//function handleUnknown($strSubId)
+    }//function handleUnknown(..)
 
 
 
@@ -566,7 +577,7 @@ class Net_Wifi
     function setPathProcWireless($strProcWireless)
     {
         $this->arFileLocation['/proc/net/wireless'] = $strProcWireless;
-    }//function setPathProcWireless($strProcWireless)
+    }//function setPathProcWireless(..)
 
 
 
@@ -594,7 +605,7 @@ class Net_Wifi
     function setPathIwconfig($strPathIwconfig)
     {
         $this->arFileLocation['iwconfig'] = $strPathIwconfig;
-    }//function setPathIwconfig($strPathIwconfig)
+    }//function setPathIwconfig(..)
 
 
 
@@ -623,7 +634,7 @@ class Net_Wifi
     function setPathIwlist($strPathIwlist)
     {
         $this->arFileLocation['iwlist'] = $strPathIwlist;
-    }//function setPathIwlist($strPathIwlist)
+    }//function setPathIwlist(..)
 
 
 }//class Net_Wifi
