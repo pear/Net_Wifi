@@ -332,7 +332,7 @@ class Net_Wifi
                 $arCells[$nCurrentCell]->wpa2_group_cipher = "";
                 $arCells[$nCurrentCell]->wpa2_pairwise_cipher = "";
                 $arCells[$nCurrentCell]->wpa2_auth_suite = "";
-		
+
                 //remove cell information from line for further interpreting
                 $strLine = substr($strLine, strpos($strLine, '- ') + 2);
             }
@@ -349,33 +349,34 @@ class Net_Wifi
             $strValue = trim(substr($strLine, $nPos));
             switch ($strId) {
             case 'ie':
-		if ($strValue == $this->REG_WPA_IE_STRING) {
-			// WPA1: "WPA Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
-			/*
-			 * WPA Version 1
-			 *     Group Cipher : TKIP
-			 *     Pairwise Ciphers (2) : TKIP CCMP
-			 *     Authentication Suites (1) : PSK
-			 */
-			$arCells[$nCurrentCell]->wpa = true;
-                	$bStandaloneRates = true;
-		}
-		
-		if ($strValue == $this->REG_WPA2_IE_STRING) {
-			// WPA2: "IEEE 802.11i/WPA2 Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
-			/*
-			 * IEEE 802.11i/WPA2 Version 1
-			 *     Group Cipher : CCMP
-			 *     Pairwise Ciphers (1) : CCMP
-			 *     Authentication Suites (1) : PSK
-			 */
-			$arCells[$nCurrentCell]->wpa2 = true;
-                	$bStandaloneRates = true;
-		}
-		$arCells[$nCurrentCell]->ies[] = $strValue;
+                if ($strValue == $this->REG_WPA_IE_STRING) {
+                    // WPA1: "WPA Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
+                    /*
+                     * WPA Version 1
+                     *     Group Cipher : TKIP
+                     *     Pairwise Ciphers (2) : TKIP CCMP
+                     *     Authentication Suites (1) : PSK
+                     */
+                     $arCells[$nCurrentCell]->wpa = true;
+                     $bStandaloneRates = true;
+                }
+
+                if ($strValue == $this->REG_WPA2_IE_STRING) {
+                    // WPA2: "IEEE 802.11i/WPA2 Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
+                    /*
+                     * IEEE 802.11i/WPA2 Version 1
+                     *     Group Cipher : CCMP
+                     *     Pairwise Ciphers (1) : CCMP
+                     *     Authentication Suites (1) : PSK
+                     */
+                     $arCells[$nCurrentCell]->wpa2 = true;
+                     $bStandaloneRates = true;
+                }
+                $arCells[$nCurrentCell]->ies[] = $strValue;
                 $arLines[$nA]     = $strValue;
                 $nA--;//go back one so that this line is re-parsed
                 break;
+
             case 'address':
                 $arCells[$nCurrentCell]->mac = $strValue;
                 break;
@@ -509,7 +510,7 @@ class Net_Wifi
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
                                 $arCells[$nCurrentCell]->wpa_group_cipher[] = $nCipher;
                             }
-			    if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
+                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
                                 $arCells[$nCurrentCell]->wpa2_group_cipher[] = $nCipher;
                             }
                         }
@@ -520,7 +521,7 @@ class Net_Wifi
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
                                $arCells[$nCurrentCell]->wpa_pairwise_cipher[] = $nCipher;
                             }
-			    if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
+                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
                                $arCells[$nCurrentCell]->wpa2_pairwise_cipher[] = $nCipher;
                             }
                         }
@@ -531,7 +532,7 @@ class Net_Wifi
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
                                $arCells[$nCurrentCell]->wpa_auth_suite[] = $nSuite;
                             }
-			    if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
+                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
                                $arCells[$nCurrentCell]->wpa2_auth_suite[] = $nSuite;
                             }
                         }
