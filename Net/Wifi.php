@@ -519,10 +519,10 @@ class Net_Wifi
                     if (preg_match_all($this->REG_PAIRWISE_CIPHERS, $strLine, $arMatches) > 0) {
                         foreach ($arMatches[1] as $nCipher) {
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                               $arCells[$nCurrentCell]->wpa_pairwise_cipher[] = $nCipher;
+                                $arCells[$nCurrentCell]->wpa_pairwise_cipher[] = $nCipher;
                             }
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                               $arCells[$nCurrentCell]->wpa2_pairwise_cipher[] = $nCipher;
+                                $arCells[$nCurrentCell]->wpa2_pairwise_cipher[] = $nCipher;
                             }
                         }
                         break;
@@ -530,10 +530,10 @@ class Net_Wifi
                     if (preg_match_all($this->REG_AUTH_SUITES, $strLine, $arMatches) > 0) {
                         foreach ($arMatches[1] as $nSuite) {
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                               $arCells[$nCurrentCell]->wpa_auth_suite[] = $nSuite;
+                                $arCells[$nCurrentCell]->wpa_auth_suite[] = $nSuite;
                             }
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                               $arCells[$nCurrentCell]->wpa2_auth_suite[] = $nSuite;
+                                $arCells[$nCurrentCell]->wpa2_auth_suite[] = $nSuite;
                             }
                         }
                         break;
