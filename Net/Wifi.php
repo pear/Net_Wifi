@@ -352,25 +352,25 @@ class Net_Wifi
                 if ($strValue == $this->REG_WPA_IE_STRING) {
                     // WPA1: "WPA Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
                     /*
-                     * WPA Version 1
-                     *     Group Cipher : TKIP
-                     *     Pairwise Ciphers (2) : TKIP CCMP
-                     *     Authentication Suites (1) : PSK
-                     */
-                     $arCells[$nCurrentCell]->wpa = true;
-                     $bStandaloneRates = true;
+                    * WPA Version 1
+                    *     Group Cipher : TKIP
+                    *     Pairwise Ciphers (2) : TKIP CCMP
+                    *     Authentication Suites (1) : PSK
+                    */
+                    $arCells[$nCurrentCell]->wpa = true;
+                    $bStandaloneRates = true;
                 }
 
                 if ($strValue == $this->REG_WPA2_IE_STRING) {
                     // WPA2: "IEEE 802.11i/WPA2 Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
                     /*
-                     * IEEE 802.11i/WPA2 Version 1
-                     *     Group Cipher : CCMP
-                     *     Pairwise Ciphers (1) : CCMP
-                     *     Authentication Suites (1) : PSK
-                     */
-                     $arCells[$nCurrentCell]->wpa2 = true;
-                     $bStandaloneRates = true;
+                    * IEEE 802.11i/WPA2 Version 1
+                    *     Group Cipher : CCMP
+                    *     Pairwise Ciphers (1) : CCMP
+                    *     Authentication Suites (1) : PSK
+                    */
+                    $arCells[$nCurrentCell]->wpa2 = true;
+                    $bStandaloneRates = true;
                 }
                 $arCells[$nCurrentCell]->ies[] = $strValue;
                 $arLines[$nA]     = $strValue;
