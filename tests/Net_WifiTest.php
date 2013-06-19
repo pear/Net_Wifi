@@ -308,11 +308,43 @@ EOT;
             "                    Extra: Rates (Mb/s): 1 2 5.5 11 ",
             "                    Extra: RSSI: -59  dBm ",
             "                    Extra: Last beacon: 544ms ago",
+            "          Cell 04 - Address: 64:70:02:2E:FF:EA",
+            "                    Channel:6",
+            "                    Frequency:2.437 GHz (Channel 6)",
+            "                    Quality=63/70  Signal level=-47 dBm  ",
+            "                    Encryption key:on",
+            "                    ESSID:\"test\"",
+            "                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 6 Mb/s",
+            "                              9 Mb/s; 12 Mb/s; 18 Mb/s",
+            "                    Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s",
+            "                    Mode:Master",
+            "                    Extra:tsf=00000001e5290ee3",
+            "                    Extra: Last beacon: 2360ms ago",
+            "                    IE: Unknown: 000474657374",
+            "                    IE: Unknown: 010882848B960C121824",
+            "                    IE: Unknown: 030106",
+            "                    IE: Unknown: 0706495420010B14",
+            "                    IE: Unknown: 2A0104",
+            "                    IE: Unknown: 32043048606C",
+            "                    IE: IEEE 802.11i/WPA2 Version 1",
+            "                        Group Cipher : TKIP",
+            "                        Pairwise Ciphers (1) : CCMP",
+            "                        Authentication Suites (1) : PSK",
+            "                    IE: WPA Version 1",
+            "                        Group Cipher : TKIP",
+            "                        Pairwise Ciphers (2) : CCMP TKIP",
+            "                        Authentication Suites (1) : PSK",
+            "                    IE: Unknown: 2D1A0C001FFF00000001000000000096000100000000000000000000",
+            "                    IE: Unknown: 3D1606000000000000000000000000000000000000000000",
+            "                    IE: Unknown: 7F0400000080",
+            "                    IE: Unknown: 6B0100",
+            "                    IE: Unknown: 6C027F00",
+            "                    IE: Unknown: DD180050F2020101000003A4000027A4000042435E0062322F00",
             );
 
         $arCells = $this->wls->parseScan($arLines);
 
-        $this->assertEquals(3                           , count($arCells));
+        $this->assertEquals(4                           , count($arCells));
 
         $this->assertEquals('net_wifi_cell'             , strtolower(get_class($arCells[0])));
 
@@ -327,6 +359,14 @@ EOT;
         $this->assertEquals('array'                     , gettype($arCells[0]->rates));
         $this->assertEquals('integer'                   , gettype($arCells[0]->rssi));
         $this->assertEquals('integer'                   , gettype($arCells[0]->beacon));
+        $this->assertEquals('boolean'                   , gettype($arCells[0]->wpa));
+        $this->assertEquals('boolean'                   , gettype($arCells[0]->wpa2));
+        $this->assertEquals('array'                     , gettype($arCells[0]->wpa_group_cipher));
+        $this->assertEquals('array'                     , gettype($arCells[0]->wpa_pairwise_cipher));
+        $this->assertEquals('array'                     , gettype($arCells[0]->wpa_auth_suite));
+        $this->assertEquals('array'                     , gettype($arCells[0]->wpa2_group_cipher));
+        $this->assertEquals('array'                     , gettype($arCells[0]->wpa2_pairwise_cipher));
+        $this->assertEquals('array'                     , gettype($arCells[0]->wpa2_auth_suite));
 
 
         $this->assertEquals('00:02:6F:08:4E:8A'         , $arCells[0]->mac);
@@ -339,6 +379,14 @@ EOT;
         $this->assertEquals(array(1., 2., 5.5, 11.)     , $arCells[0]->rates);
         $this->assertEquals(-54                         , $arCells[0]->rssi);
         $this->assertEquals(8                           , $arCells[0]->beacon);
+        $this->assertEquals(false                       , $arCells[0]->wpa);
+        $this->assertEquals(false                       , $arCells[0]->wpa2);
+        $this->assertEquals(array()                     , $arCells[0]->wpa_group_cipher);
+        $this->assertEquals(array()                     , $arCells[0]->wpa_pairwise_cipher);
+        $this->assertEquals(array()                     , $arCells[0]->wpa_auth_suite);
+        $this->assertEquals(array()                     , $arCells[0]->wpa2_group_cipher);
+        $this->assertEquals(array()                     , $arCells[0]->wpa2_pairwise_cipher);
+        $this->assertEquals(array()                     , $arCells[0]->wpa2_auth_suite);
 
         $this->assertEquals('00:0F:3D:4B:0D:6E'         , $arCells[1]->mac);
         $this->assertEquals('RIKA'                      , $arCells[1]->ssid);
@@ -350,6 +398,14 @@ EOT;
         $this->assertEquals(array(1., 2., 5.5, 6., 9., 11., 12., 18., 24., 36., 48., 54.), $arCells[1]->rates);
         $this->assertEquals(-53                         , $arCells[1]->rssi);
         $this->assertEquals(754                         , $arCells[1]->beacon);
+        $this->assertEquals(false                       , $arCells[1]->wpa);
+        $this->assertEquals(false                       , $arCells[1]->wpa2);
+        $this->assertEquals(array()                     , $arCells[1]->wpa_group_cipher);
+        $this->assertEquals(array()                     , $arCells[1]->wpa_pairwise_cipher);
+        $this->assertEquals(array()                     , $arCells[1]->wpa_auth_suite);
+        $this->assertEquals(array()                     , $arCells[1]->wpa2_group_cipher);
+        $this->assertEquals(array()                     , $arCells[1]->wpa2_pairwise_cipher);
+        $this->assertEquals(array()                     , $arCells[1]->wpa2_auth_suite);
 
         $this->assertEquals('00:0D:BC:50:62:06'         , $arCells[2]->mac);
         $this->assertEquals('skyspeed'                  , $arCells[2]->ssid);
@@ -361,6 +417,33 @@ EOT;
         $this->assertEquals(array(1., 2., 5.5, 11.)     , $arCells[2]->rates);
         $this->assertEquals(-59                         , $arCells[2]->rssi);
         $this->assertEquals(544                         , $arCells[2]->beacon);
+        $this->assertEquals(false                       , $arCells[2]->wpa);
+        $this->assertEquals(false                       , $arCells[2]->wpa2);
+        $this->assertEquals(array()                     , $arCells[2]->wpa_group_cipher);
+        $this->assertEquals(array()                     , $arCells[2]->wpa_pairwise_cipher);
+        $this->assertEquals(array()                     , $arCells[2]->wpa_auth_suite);
+        $this->assertEquals(array()                     , $arCells[2]->wpa2_group_cipher);
+        $this->assertEquals(array()                     , $arCells[2]->wpa2_pairwise_cipher);
+        $this->assertEquals(array()                     , $arCells[2]->wpa2_auth_suite);
+
+        $this->assertEquals('64:70:02:2E:FF:EA'         , $arCells[3]->mac);
+        $this->assertEquals('test'                      , $arCells[3]->ssid);
+        $this->assertEquals('master'                    , $arCells[3]->mode);
+        $this->assertEquals(6                           , $arCells[3]->channel);
+        $this->assertEquals(true                        , $arCells[3]->encryption);
+        $this->assertEquals(''                          , $arCells[3]->protocol);
+        $this->assertEquals(54                          , $arCells[3]->rate);
+        $this->assertEquals(array(1., 2., 5.5, 6., 9., 11., 12., 18., 24., 36., 48., 54.), $arCells[3]->rates);
+        $this->assertEquals(-47                         , $arCells[3]->rssi);
+        $this->assertEquals(2360                        , $arCells[3]->beacon);
+        $this->assertEquals(true                        , $arCells[3]->wpa);
+        $this->assertEquals(true                        , $arCells[3]->wpa2);
+        $this->assertEquals(array('TKIP')               , $arCells[3]->wpa_group_cipher);
+        $this->assertEquals(array('CCMP', 'TKIP')       , $arCells[3]->wpa_pairwise_cipher);
+        $this->assertEquals(array('PSK')                , $arCells[3]->wpa_auth_suite);
+        $this->assertEquals(array('TKIP')               , $arCells[3]->wpa2_group_cipher);
+        $this->assertEquals(array('CCMP')               , $arCells[3]->wpa2_pairwise_cipher);
+        $this->assertEquals(array('PSK')                , $arCells[3]->wpa2_auth_suite);
 
 
         //some other peers
@@ -556,7 +639,7 @@ wlan0     Scan completed :
           Cell 01 - Address: 00:50:7F:9B:A7:D8
                     Channel:8
                     Frequency:2.447 GHz (Channel 8)
-                    Quality=64/70  Signal level=-46 dBm  
+                    Quality=64/70  Signal level=-46 dBm
                     Encryption key:off
                     ESSID:"UPSTREAM_NEU"
                     Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s; 9 Mb/s
@@ -582,7 +665,7 @@ wlan0     Scan completed :
           Cell 02 - Address: 00:13:49:D6:AC:3C
                     Channel:6
                     Frequency:2.437 GHz (Channel 6)
-                    Quality=33/70  Signal level=-77 dBm  
+                    Quality=33/70  Signal level=-77 dBm
                     Encryption key:off
                     ESSID:"home.cweiske.de"
                     Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 11 Mb/s
