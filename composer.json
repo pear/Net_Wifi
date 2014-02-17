@@ -1,0 +1,29 @@
+{
+    "name": "pear/net_wifi",
+    "description": "Scans for wireless networks",
+    "type": "library",
+    "license": "LGPL-2.1",
+    "homepage": "http://pear.php.net/package/Net_Wifi/",
+    "authors": [
+        {
+            "email": "cweiske@php.net",
+            "name": "Christian Weiske",
+            "role": "Lead"
+        }
+    ],
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Net_Wifi",
+        "source": "https://github.com/pear/Net_Wifi"
+    },
+    "autoload": {
+        "psr-0": {
+            "Net": "./"
+        }
+    },
+    "include-path": [
+        "./"
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
