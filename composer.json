@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "Net_Wifi": "./"
+            "Net": "./"
         }
     },
     "description": "Scans for wireless networks",
