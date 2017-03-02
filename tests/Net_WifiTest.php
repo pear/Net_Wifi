@@ -12,13 +12,6 @@
  * @version    SVN: $Id$
  * @link       http://pear.php.net/package/Net_Wifi
  */
-// Call Net_WifiTest::main() if this source file is executed directly.
-if (!defined("PHPUnit_MAIN_METHOD")) {
-    define("PHPUnit_MAIN_METHOD", "Net_WifiTest::main");
-}
-
-require_once "PHPUnit/Framework/TestCase.php";
-require_once "PHPUnit/Framework/TestSuite.php";
 
 //make cvs testing work
 chdir(dirname(__FILE__) . '/../');
@@ -37,21 +30,6 @@ require_once 'Stream/Var.php';
  */
 class Net_WifiTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     *
-     * @return void
-     */
-    public static function main()
-    {
-        include_once 'PHPUnit/TextUI/TestRunner.php';
-
-        $suite  = new PHPUnit_Framework_TestSuite('Net_WifiTest');
-        $result = PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * This method is called before the first test of
      * this test class is run.
@@ -752,10 +730,5 @@ EOD
         $this->wls->setPathIwlist($path);
         $this->assertEquals($path, $this->wls->getPathIwlist());
     }
-}
-
-// Call Net_WifiTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == "Net_WifiTest::main") {
-    Net_WifiTest::main();
 }
 ?>
