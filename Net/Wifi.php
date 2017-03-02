@@ -77,7 +77,7 @@ class Net_Wifi
     /**
     * Constructor which tries to guess the paths of the tools
     */
-    function Net_Wifi()
+    function __construct()
     {
         //try to find the paths
         $iwconfig = System::which('iwconfig');
@@ -93,8 +93,15 @@ class Net_Wifi
         } else if (file_exists('/sbin/iwlist')) {
             $this->setPathIwlist('/sbin/iwlist');
         }
-    }//function Net_Wifi()
+    }
 
+    /**
+     * PHP 4 constructor for backwards compatibility.
+     */
+    function Net_Wifi()
+    {
+        self::__construct();
+    }
 
 
     /**
