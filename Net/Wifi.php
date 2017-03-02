@@ -323,7 +323,7 @@ class Net_Wifi
                 //add new cell
                 $arCells[$nCurrentCell]       = new Net_Wifi_Cell();
                 $arCells[$nCurrentCell]->cell = $nCell;
-                $arCells[$nCurrentCell]->ies = "";
+                $arCells[$nCurrentCell]->ies = array();
                 $arCells[$nCurrentCell]->wpa = false;
                 $arCells[$nCurrentCell]->wpa2 = false;
                 $arCells[$nCurrentCell]->wpa_group_cipher = array();
