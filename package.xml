@@ -23,10 +23,10 @@
   <email>cweiske@php.net</email>
   <active>yes</active>
  </lead>
- <date>2009-10-20</date>
-
+ <date>2013-06-19</date>
+ <time>07:24:12</time>
  <version>
-  <release>1.1.0</release>
+  <release>1.2.0</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -36,7 +36,8 @@
  <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL</license>
 
  <notes>
-  - Fix bug #16677: unknown information should be output to stderr or via Log package
+Add Wi-FI WPA and WPA2 detection with Group Cipher, Pairwise Ciphers
+and Authentication Suites.
  </notes>
 
  <contents>
@@ -72,6 +73,23 @@
  <phprelease />
 
  <changelog>
+
+  <release>
+   <version>
+    <release>1.2.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2013-06-19</date>
+   <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL</license>
+   <notes>
+Add Wi-FI WPA and WPA2 detection with Group Cipher, Pairwise Ciphers
+and Authentication Suites.
+   </notes>
+  </release>
 
   <release>
    <version>
