@@ -52,9 +52,10 @@ class Net_Wifi
     var $REG_WPA2_IE_STRING       = 'IEEE 802.11i/WPA2 Version 1';
 
     /**
-    * Various locations of programs
-    * @var array
-    */
+     * Various locations of programs
+     *
+     * @var array
+     */
     var $arFileLocation = array(
         'iwconfig'           => '/usr/sbin/iwconfig',
         'iwlist'             => '/usr/sbin/iwlist',
@@ -97,6 +98,8 @@ class Net_Wifi
 
     /**
      * PHP 4 constructor for backwards compatibility.
+     *
+     * @return void
      */
     function Net_Wifi()
     {
@@ -237,7 +240,7 @@ class Net_Wifi
     {
         $arWirelessInterfaces = array();
         if (file_exists($this->arFileLocation['/proc/net/wireless'])) {
-            /**
+            /*
             *   use /proc/net/wireless
             */
             $arLines = file($this->arFileLocation['/proc/net/wireless']);
@@ -251,7 +254,7 @@ class Net_Wifi
                 }
             }//we've got more than 2 lines
         } else {
-            /**
+            /*
             *   use iwconfig
             */
             $arLines = array();
@@ -357,7 +360,9 @@ class Net_Wifi
             switch ($strId) {
             case 'ie':
                 if ($strValue == $this->REG_WPA_IE_STRING) {
-                    // WPA1: "WPA Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
+                    // WPA1: "WPA Version 1"
+                    // (multiline with Group Cipher list,
+                    //  Pairwise Ciphers list and Authentication Suites)
                     /*
                     * WPA Version 1
                     *     Group Cipher : TKIP
@@ -369,7 +374,9 @@ class Net_Wifi
                 }
 
                 if ($strValue == $this->REG_WPA2_IE_STRING) {
-                    // WPA2: "IEEE 802.11i/WPA2 Version 1" (multiline with Group Cipher list, Pairwise Ciphers list and Authentication Suites)
+                    // WPA2: "IEEE 802.11i/WPA2 Version 1"
+                    // (multiline with Group Cipher list,
+                    //  Pairwise Ciphers list and Authentication Suites)
                     /*
                     * IEEE 802.11i/WPA2 Version 1
                     *     Group Cipher : CCMP
@@ -512,13 +519,16 @@ class Net_Wifi
                         }
                         break;
                     }
+
                     if (preg_match_all($this->REG_GROUP_CIPHER, $strLine, $arMatches) > 0) {
                         foreach ($arMatches[1] as $nCipher) {
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                                $arCells[$nCurrentCell]->wpa_group_cipher = explode(' ', $nCipher);
+                                $arCells[$nCurrentCell]->wpa_group_cipher
+                                    = explode(' ', $nCipher);
                             }
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                                $arCells[$nCurrentCell]->wpa2_group_cipher = explode(' ', $nCipher);
+                                $arCells[$nCurrentCell]->wpa2_group_cipher
+                                    = explode(' ', $nCipher);
                             }
                         }
                         break;
@@ -526,10 +536,12 @@ class Net_Wifi
                     if (preg_match_all($this->REG_PAIRWISE_CIPHERS, $strLine, $arMatches) > 0) {
                         foreach ($arMatches[1] as $nCipher) {
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                                $arCells[$nCurrentCell]->wpa_pairwise_cipher = explode(' ', $nCipher);
+                                $arCells[$nCurrentCell]->wpa_pairwise_cipher
+                                    = explode(' ', $nCipher);
                             }
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                                $arCells[$nCurrentCell]->wpa2_pairwise_cipher = explode(' ', $nCipher);
+                                $arCells[$nCurrentCell]->wpa2_pairwise_cipher
+                                    = explode(' ', $nCipher);
                             }
                         }
                         break;
@@ -537,10 +549,12 @@ class Net_Wifi
                     if (preg_match_all($this->REG_AUTH_SUITES, $strLine, $arMatches) > 0) {
                         foreach ($arMatches[1] as $nSuite) {
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                                $arCells[$nCurrentCell]->wpa_auth_suite = explode(' ', $nSuite);
+                                $arCells[$nCurrentCell]->wpa_auth_suite
+                                    = explode(' ', $nSuite);
                             }
                             if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                                $arCells[$nCurrentCell]->wpa2_auth_suite = explode(' ', $nSuite);
+                                $arCells[$nCurrentCell]->wpa2_auth_suite
+                                    = explode(' ', $nSuite);
                             }
                         }
                         break;
@@ -630,9 +644,9 @@ class Net_Wifi
 
 
 
-    /**
-    * and now some dumb getters and setters
-    */
+    /*
+     * and now some dumb getters and setters
+     */
 
 
 

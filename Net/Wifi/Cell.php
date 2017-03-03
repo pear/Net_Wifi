@@ -24,87 +24,99 @@
 class Net_Wifi_Cell
 {
     /**
-    *   The current cell number.
-    *   Has nothing to say.
-    *   @var int
-    */
+     * The current cell number.
+     * Has nothing to say.
+     *
+     * @var int
+     */
     var $cell = null;
 
     /**
-    *   MAC address of the cell (access point or ad-hoc station).
-    *   example: 00:40:05:28:EB:45
-    *   @var string
-    */
+     * MAC address of the cell (access point or ad-hoc station).
+     * example: 00:40:05:28:EB:45
+     *
+     * @var string
+     */
     var $mac = null;
 
     /**
-    *   "Service Set IDentifier" of the cell which identifies the network.
-    *   Max. 32 alphanumeric characters
-    *   example: "My Network" (without quotes)
-    *   @var string
-    */
+     * "Service Set IDentifier" of the cell which identifies the network.
+     * Max. 32 alphanumeric characters
+     * example: "My Network" (without quotes)
+     *
+     * @var string
+     */
     var $ssid = null;
 
     /**
-    *   Network type.
-    *   can be "master" or "ad-hoc" (without quotes)
-    *   @var string
-    */
+     * Network type.
+     * can be "master" or "ad-hoc" (without quotes)
+     *
+     * @var string
+     */
     var $mode = null;
 
     /**
-    *   Channel number used for communication.
-    *   number from 1 to 12 or so
-    *   @var int
-    */
+     * Channel number used for communication.
+     * number from 1 to 12 or so
+     *
+     * @var int
+     */
     var $channel = null;
 
     /**
-    *   If encryption is used.
-    *   @var boolean
-    */
+     * If encryption is used.
+     *
+     * @var boolean
+     */
     var $encryption = null;
 
     /**
-    *   Channel frequency.
-    *   example: 2.412GHz
-    *   @var string
-    */
+     * Channel frequency.
+     * example: 2.412GHz
+     *
+     * @var string
+     */
     var $frequency = null;
 
     /**
-    *   The protocol version used.
-    *   example: IEEE 802.11b
-    *   @var string
-    */
+     * The protocol version used.
+     * example: IEEE 802.11b
+     *
+     * @var string
+     */
     var $protocol = null;
 
     /**
-    *   Bit rate which is used (when connected).
-    *   May be set when not connected!
-    *   @var float
-    */
+     * Bit rate which is used (when connected).
+     * May be set when not connected!
+     *
+     * @var float
+     */
     var $rate = null;
 
     /**
-    *   Array of supported bit rates.
-    *   @var array(float)
-    */
+     * Array of supported bit rates.
+     *
+     * @var array(float)
+     */
     var $rates = array();
 
     /**
-    *   Signal strength.
-    *   example: -59
-    *   @var int
-    */
+     * Signal strength.
+     * example: -59
+     *
+     * @var int
+     */
     var $rssi = null;
 
     /**
-    *   The time since the last beacon (time sync) frame has been sent, in ms.
-    *   @var int
-    */
+     * The time since the last beacon (time sync) frame has been sent, in ms.
+     *
+     * @var int
+     */
     var $beacon = null;
 
-}//class Net_Wifi_Cell
+}
 
 ?>
