@@ -520,43 +520,27 @@ class Net_Wifi
                         break;
                     }
 
-                    if (preg_match_all($this->REG_GROUP_CIPHER, $strLine, $arMatches) > 0) {
-                        foreach ($arMatches[1] as $nCipher) {
-                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                                $arCells[$nCurrentCell]->wpa_group_cipher
-                                    = explode(' ', $nCipher);
-                            }
-                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                                $arCells[$nCurrentCell]->wpa2_group_cipher
-                                    = explode(' ', $nCipher);
-                            }
-                        }
+                    $found = $this->parseWpaCipher(
+                        $strLine, $arCells, $nCurrentCell,
+                        $this->REG_GROUP_CIPHER, 'group_cipher'
+                    );
+                    if ($found) {
                         break;
                     }
-                    if (preg_match_all($this->REG_PAIRWISE_CIPHERS, $strLine, $arMatches) > 0) {
-                        foreach ($arMatches[1] as $nCipher) {
-                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                                $arCells[$nCurrentCell]->wpa_pairwise_cipher
-                                    = explode(' ', $nCipher);
-                            }
-                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                                $arCells[$nCurrentCell]->wpa2_pairwise_cipher
-                                    = explode(' ', $nCipher);
-                            }
-                        }
+
+                    $found = $this->parseWpaCipher(
+                        $strLine, $arCells, $nCurrentCell,
+                        $this->REG_PAIRWISE_CIPHERS, 'pairwise_cipher'
+                    );
+                    if ($found) {
                         break;
                     }
-                    if (preg_match_all($this->REG_AUTH_SUITES, $strLine, $arMatches) > 0) {
-                        foreach ($arMatches[1] as $nSuite) {
-                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) { // WPA1
-                                $arCells[$nCurrentCell]->wpa_auth_suite
-                                    = explode(' ', $nSuite);
-                            }
-                            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) { // WPA2
-                                $arCells[$nCurrentCell]->wpa2_auth_suite
-                                    = explode(' ', $nSuite);
-                            }
-                        }
+
+                    $found = $this->parseWpaCipher(
+                        $strLine, $arCells, $nCurrentCell,
+                        $this->REG_AUTH_SUITES, 'auth_suite'
+                    );
+                    if ($found) {
                         break;
                     }
                 }
@@ -580,7 +564,37 @@ class Net_Wifi
         return $arCells;
     }//function parseScan(..)
 
-
+    /**
+     * Parse a WPA/WPA2 cipher string and append it to the cell
+     *
+     * @param string  $strLine      Input line that gets parsed
+     * @param array   $arCells      Array of cell data
+     * @param integer $nCurrentCell Key of current cell in $arCells
+     * @param string  $regex        Expression to match line against
+     * @param string  $property     Cell property to set (without wpa_/wpa2_)
+     *
+     * @return boolean True if a cipher matched
+     */
+    protected function parseWpaCipher(
+        $strLine, &$arCells, $nCurrentCell, $regex, $property
+    ) {
+        if (preg_match_all($regex, $strLine, $arMatches) == 0) {
+            return false;
+        }
+        foreach ($arMatches[1] as $nCipher) {
+            //WPA 1
+            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA_IE_STRING) {
+                $arCells[$nCurrentCell]->{'wpa_' . $property}
+                    = explode(' ', $nCipher);
+            }
+            //WPA 2
+            if (end($arCells[$nCurrentCell]->ies) == $this->REG_WPA2_IE_STRING) {
+                $arCells[$nCurrentCell]->{'wpa2_' . $property}
+                    = explode(' ', $nCipher);
+            }
+        }
+        return true;
+    }
 
     /**
     * Tells the driver to use the access point with the given MAC address only.
