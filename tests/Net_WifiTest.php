@@ -245,13 +245,16 @@ EOT;
     *
     * @return void
     */
-    function testParseScan()
+    function testParseScanNoPeers()
     {
         //no peers
         $arLines = array("eth1      No scan results");
         $arCells = $this->wls->parseScan($arLines);
         $this->assertEquals(0, count($arCells));
+    }
 
+    function testParseScanSomePeers()
+    {
         //some peers
         //driver: ipw2200 0.21, acer travelmate 6003
         $arLines = array(
@@ -422,9 +425,10 @@ EOT;
         $this->assertEquals(array('TKIP')               , $arCells[3]->wpa2_group_cipher);
         $this->assertEquals(array('CCMP')               , $arCells[3]->wpa2_pairwise_cipher);
         $this->assertEquals(array('PSK')                , $arCells[3]->wpa2_auth_suite);
+    }
 
-
-        //some other peers
+    function testParseScanSomeOtherPeers()
+    {
         //driver: ipw2100 ???, samsung x10
         $arLines = array(
             "eth2      Scan completed :",
@@ -470,8 +474,13 @@ EOT;
         $this->assertEquals(-88                         , $arCells[0]->rssi);
         $this->assertEquals(747642                      , $arCells[0]->beacon);
 
+    }
 
-        //with ipw2200 1.0 we've got "Signal level=..." instead of "Extra: Signal"
+    /**
+     * with ipw2200 1.0 we've got "Signal level=..." instead of "Extra: Signal"
+     */
+    function testParseScanSignalLevel()
+    {
         $arLines = array(
             "eth1      Scan completed :",
             "  Cell 01 - Address: 00:03:C9:44:34:2C",
@@ -495,9 +504,13 @@ EOT;
         //different signal name
         $this->assertEquals(-51                         , $arCells[0]->rssi);
         $this->assertEquals(9                           , $arCells[0]->beacon);
+    }
 
-
-        //ipw2200 1.0.1
+    /**
+     * ipw2200 1.0.1
+     */
+    function testParseScanIpw2200v101()
+    {
         $arLines = array(
             "eth1      Scan completed :",
             "          Cell 01 - Address: 00:0D:BC:68:28:1A",
@@ -530,10 +543,13 @@ EOT;
         $this->assertEquals('Rai Private'              , $arCells[0]->ssid);
         $this->assertEquals(-60                        , $arCells[0]->rssi);
         $this->assertEquals(59                         , $arCells[0]->beacon);
+    }
 
-
-
-        //ipw2100 carsten (unknown version)
+    /**
+     * ipw2100 carsten (unknown version)
+     */
+    function testParseScanUnknownSize()
+    {
         $arLines = array(
             'eth1      Scan completed :',
             '          Cell 01 - Address: 00:12:D9:AC:BD:00',
@@ -563,9 +579,13 @@ EOT;
         $this->assertEquals(18                         , $arCells[0]->rate);
         $this->assertEquals(array(1.,2.,5.5,6.,9.,11.,12.,18.), $arCells[0]->rates);
         $this->assertEquals(false                      , $arCells[0]->encryption);
+    }
 
-
-        //ipw2200 kernel 2.18.1 (probably version 1.1.3)
+    /**
+     * ipw2200 kernel 2.18.1 (probably version 1.1.3)
+     */
+    function testParseScanipw2200kernel2181()
+    {
         $arLines = explode(
             "\n",
             <<<EOD
