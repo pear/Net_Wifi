@@ -239,10 +239,23 @@ class Net_Wifi
     function getSupportedInterfaces()
     {
         $arWirelessInterfaces = array();
-        if (file_exists($this->arFileLocation['/proc/net/wireless'])) {
-            /*
-            *   use /proc/net/wireless
-            */
+        if (is_executable($this->arFileLocation['iwconfig'])) {
+            // use iwconfig
+            $arLines = array();
+            exec($this->arFileLocation['iwconfig'] . ' 2>&1', $arLines);
+            foreach ($arLines as $strLine) {
+                if (strlen($strLine)
+                    && trim($strLine[0]) != ''
+                    && strpos($strLine, 'no wireless extensions') === false
+                ) {
+                    //there is something
+                    $arWirelessInterfaces[]
+                        = substr($strLine, 0, strpos($strLine, ' '));
+                }
+            }//foreach line
+
+        } else if (file_exists($this->arFileLocation['/proc/net/wireless'])) {
+            // use /proc/net/wireless
             $arLines = file($this->arFileLocation['/proc/net/wireless']);
             //begin with 3rd line
             if (count($arLines) > 2) {
@@ -253,22 +266,7 @@ class Net_Wifi
                     $arWirelessInterfaces[] = $strInterface;
                 }
             }//we've got more than 2 lines
-        } else {
-            /*
-            *   use iwconfig
-            */
-            $arLines = array();
-            exec($this->arFileLocation['iwconfig'], $arLines);
-            foreach ($arLines as $strLine) {
-                if (trim($strLine[0]) != ''
-                    && strpos($strLine, 'no wireless extensions') === false
-                ) {
-                    //there is something
-                    $arWirelessInterfaces[]
-                        = substr($strLine, 0, strpos($strLine, ' '));
-                }
-            }//foreach line
-        }//use iwconfig
+        }
 
         return $arWirelessInterfaces;
     }//function getSupportedInterfaces()
@@ -288,7 +286,8 @@ class Net_Wifi
         $arLines = array();
         exec(
             $this->arFileLocation['iwlist'] . ' '
-            . escapeshellarg($strInterface) . ' scanning',
+            . escapeshellarg($strInterface) . ' scanning'
+            . ' 2>&1',
             $arLines
         );
 
@@ -559,7 +558,6 @@ class Net_Wifi
             $arCells[$nCurrentCell]->rates
                 = array_unique($arCells[$nCurrentCell]->rates);
         }
-
 
         return $arCells;
     }//function parseScan(..)

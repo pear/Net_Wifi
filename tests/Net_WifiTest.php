@@ -61,13 +61,14 @@ class Net_WifiTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testGetSupportedInterfacesNone()
+    public function testGetSupportedInterfacesPWNone()
     {
         $GLOBALS['getSItest'] = <<<EOD
 Inter-| sta-|   Quality        |   Discarded packets               | Missed | WE
  face | tus | link level noise |  nwid  crypt   frag  retry   misc | beacon | 22
 
 EOD;
+        $this->wls->setPathIwconfig(null);
         $this->wls->setPathProcWireless('var://GLOBALS/getSItest');
         $arInterfaces = $this->wls->getSupportedInterfaces();
         $this->assertEquals(0, count($arInterfaces));
@@ -80,7 +81,7 @@ EOD;
      *
      * @return void
      */
-    public function testGetSupportedInterfacesSingle()
+    public function testGetSupportedInterfacesPWSingle()
     {
         $GLOBALS['getSItest'] = <<<EOD
 Inter-| sta-|   Quality        |   Discarded packets               | Missed | WE
@@ -100,7 +101,7 @@ EOD;
      *
      * @return void
      */
-    public function testGetSupportedInterfacesMultiple()
+    public function testGetSupportedInterfacesPWMultiple()
     {
         $GLOBALS['getSItest'] = <<<EOD
 Inter-| sta-|   Quality        |   Discarded packets               | Missed | WE
@@ -109,6 +110,7 @@ Inter-| sta-|   Quality        |   Discarded packets               | Missed | WE
  wlan1: 0000    0     0     0        0      0      0      0      0        0
 
 EOD;
+        $this->wls->setPathIwconfig(null);
         $this->wls->setPathProcWireless('var://GLOBALS/getSItest');
         $arInterfaces = $this->wls->getSupportedInterfaces();
         $this->assertEquals(array('wlan0', 'wlan1'), $arInterfaces);
